@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>炳昌 測試</title>
+  <style>
+    :root {
+      --primary: #1c36b7;
+      --primary-dark: #12257f;
+      --text: #111111;
+      --text-light: #5f6470;
+      --bg: #f5f7fb;
+      --white: #ffffff;
+      --line: rgba(0, 0, 0, 0.08);
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --nav-h: 92px;
+      --max-width: 1280px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(var(--max-width), calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    section {
+      position: relative;
+      scroll-margin-top: 110px;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: var(--nav-h);
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      z-index: 1000;
+      transition: 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      height: 82px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .logo {
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      font-weight: 900;
+      letter-spacing: 2px;
+      flex-shrink: 0;
+      color: #d40000;
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      list-style: none;
+      margin-left: auto;
+    }
+
+    .menu a {
+      position: relative;
+      font-size: 1.05rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .menu a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 0;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    .menu a:hover::after {
+      width: 100%;
+    }
+
+    .menu-toggle {
+      display: none;
+      border: none;
+      background: none;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+      overflow: hidden;
+      background: #e9edf5;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.52) 0%, rgba(0, 0, 0, 0.26) 36%, rgba(0, 0, 0, 0.06) 68%, rgba(0, 0, 0, 0.00) 100%),
+        url("images/company.jpg") center center / cover no-repeat;
+      transform: scale(1.03);
+      will-change: transform;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 82% 20%, rgba(28, 54, 183, 0.16), transparent 24%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.00));
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      min-height: calc(100vh - var(--nav-h));
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      padding: 48px 0 80px;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      color: #fff;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 6vw, 5.6rem);
+      line-height: 1.04;
+      font-weight: 900;
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
+      text-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      color: rgba(255, 255, 255, 0.92);
+      margin-bottom: 30px;
+      max-width: 560px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 1rem;
+      transition: 0.25s ease;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(28, 54, 183, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    /* ===== SECTION BASE ===== */
+    .section {
+      padding: 120px 0;
+    }
+
+    .section-head {
+      margin-bottom: 54px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 14px;
+      color: var(--primary);
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .section-head p {
+      max-width: 760px;
+      color: var(--text-light);
+      font-size: 1.08rem;
+    }
+
+    /* ===== ABOUT ===== */
+    .about-card {
+      border-radius: var(--radius-xl);
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 42px;
+    }
+
+    .about-card h3 {
+      font-size: 2rem;
+      margin-bottom: 18px;
+    }
+
+    .about-card p {
+      color: var(--text-light);
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+    }
+
+    /* ===== FEATURE GRID ===== */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      transition: 0.3s ease;
+      min-height: 240px;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .feature-card h3 {
+      font-size: 1.55rem;
+      margin-bottom: 14px;
+      color: var(--primary);
+    }
+
+    .feature-card p {
+      color: var(--text-light);
+      font-size: 1rem;
+    }
+
+    /* ===== 3D SHOWCASE ===== */
+    .showcase-3d {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .showcase-view,
+    .showcase-info {
+      background: #fff;
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 32px;
+    }
+
+    .showcase-view {
+      min-height: 440px;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(28, 54, 183, 0.14), transparent 24%),
+        linear-gradient(135deg, #ffffff 0%, #eef2fb 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .showcase-placeholder {
+      width: min(300px, 78%);
+      aspect-ratio: 1 / 1;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #1c36b7 0%, #355af1 100%);
+      box-shadow: 0 28px 80px rgba(28, 54, 183, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      transform: rotate(-10deg);
+    }
+
+    .showcase-info h3 {
+      font-size: 1.8rem;
+      margin-bottom: 14px;
+      color: var(--primary);
+    }
+
+    .showcase-info p {
+      color: var(--text-light);
+      margin-bottom: 14px;
+    }
+
+    .showcase-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .showcase-tags span {
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #eef2fb;
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    /* ===== CATALOG ===== */
+    .catalog-card {
+      border-radius: 36px;
+      padding: 58px;
+      background: linear-gradient(135deg, #1c36b7 0%, #132566 100%);
+      color: #fff;
+      box-shadow: 0 28px 90px rgba(28, 54, 183, 0.28);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .catalog-card h2 {
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+
+    .catalog-card p {
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 620px;
+    }
+
+    .catalog-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .btn-white {
+      background: #fff;
+      color: var(--primary);
+    }
+
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    /* ===== CONTACT ===== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .contact-card,
+    .contact-form {
+      background: #fff;
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 36px;
+    }
+
+    .contact-card h3,
+    .contact-form h3 {
+      font-size: 1.8rem;
+      margin-bottom: 18px;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .contact-item {
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: #f4f7fd;
+    }
+
+    .contact-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+
+    .contact-item span {
+      color: var(--text-light);
+      font-weight: 700;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .form-grid input,
+    .form-grid textarea {
+      width: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.09);
+      border-radius: 16px;
+      padding: 16px 18px;
+      font: inherit;
+      outline: none;
+      background: #fff;
+      transition: 0.2s ease;
+    }
+
+    .form-grid input:focus,
+    .form-grid textarea:focus {
+      border-color: rgba(28, 54, 183, 0.4);
+      box-shadow: 0 0 0 4px rgba(28, 54, 183, 0.08);
+    }
+
+    .form-grid textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 34px 0 46px;
+      color: #7a8191;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-weight: 700;
+    }
+
+    /* ===== REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(48px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RIGHT SIDE TOGGLE ===== */
+    .side-toggle {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 72px;
+      height: 72px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 50%;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2000;
+      transition:
+        right 0.38s ease,
+        transform 0.28s ease,
+        box-shadow 0.28s ease,
+        background 0.28s ease;
+    }
+
+    .side-toggle:hover {
+      transform: translateY(-50%) scale(1.06);
+      box-shadow: 0 16px 42px rgba(0, 0, 0, 0.22);
+    }
+
+    .side-toggle img {
+      width: 28px;
+      height: 28px;
+      transition: transform 0.38s ease;
+      pointer-events: none;
+    }
+
+    .side-toggle.active {
+      right: 260px;
+    }
+
+    .side-toggle.active img {
+      transform: rotate(180deg);
+    }
+
+    .side-panel {
+      position: fixed;
+      right: -290px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 230px;
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 24px 0 0 24px;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 1500;
+      opacity: 0;
+      transition:
+        right 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.28s ease;
+    }
+
+    .side-panel a {
+      padding: 12px 16px;
+      background: #f4f7fd;
+      border-radius: 14px;
+      font-weight: 800;
+      color: #1c36b7;
+      transition: 0.25s ease;
+    }
+
+    .side-panel a:hover {
+      background: #e7eefc;
+      transform: translateX(-4px);
+    }
+
+    .side-panel.open {
+      right: 84px;
+      opacity: 1;
+    }
+
+    /* ===== RWD ===== */
+    @media (max-width: 1080px) {
+      .catalog-card,
+      .contact-grid,
+      .feature-grid,
+      .showcase-3d {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      :root {
+        --nav-h: 82px;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .menu {
+        position: absolute;
+        left: 0;
+        top: 100%;
+        width: 100%;
+        padding: 20px 24px 26px;
+        background: rgba(255, 255, 255, 0.98);
+        border-bottom: 1px solid var(--line);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition: 0.25s ease;
+      }
+
+      .menu.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      .hero {
+        padding-top: calc(var(--nav-h));
+      }
+
+      .about-card,
+      .contact-card,
+      .contact-form,
+      .catalog-card,
+      .feature-card,
+      .showcase-view,
+      .showcase-info {
+        padding: 28px;
+      }
+
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+
+      .side-toggle {
+        width: 60px;
+        height: 60px;
+        right: 14px;
+      }
+
+      .side-toggle img {
+        width: 24px;
+        height: 24px;
+      }
+
+      .side-toggle.active {
+        right: 214px;
+      }
+
+      .side-panel {
+        width: 190px;
+        right: -220px;
+        padding: 16px;
+      }
+
+      .side-panel.open {
+        right: 68px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        width: min(var(--max-width), calc(100% - 28px));
+      }
+
+      .section {
+        padding: 88px 0;
+      }
+
+      .hero h1 {
+        font-size: 2.3rem;
+      }
+
+      .catalog-card h2,
+      .section-head h2 {
+        font-size: 2rem;
+      }
+
+      .side-toggle {
+        width: 56px;
+        height: 56px;
+      }
+
+      .side-toggle.active {
+        right: 188px;
+      }
+
+      .side-panel {
+        width: 164px;
+      }
+
+      .side-panel.open {
+        right: 62px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="#top" class="logo">炳昌</a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="切換選單">☰</button>
+
+      <ul class="menu" id="menu">
+        <li><a href="#about">公司簡介</a></li>
+        <li><a href="order.html">訂購</a></li>
+        <li><a href="#catalog">目錄下載</a></li>
+        <li><a href="#contact">聯絡我們</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-overlay"></div>
+
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <h1>炳昌五金</h1>
+          
+
+          <div class="hero-actions">
+            <a href="#about" class="btn btn-primary">查看品牌介紹</a>
+            <a href="order.html" class="btn btn-secondary">立即訂購</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">關於炳昌</span>
+          <h2>公司簡介</h2>
+          <p>
+            成立於 XXXXXXXXXXXXXXXX<br>
+            XXXXXXXXXXXXXXXX<br>
+            XXXXXXXXXXXXXXXX<br>
+            XXXXXXXXXXXXXXXX<br>
+            XXXXXXXXXXXXXXXX。
+          </p>
+        
+      </div>
+    </section>
+
+    <section class="section" id="new-products">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">NEW ARRIVAL</span>
+          <h2>新品專區</h2>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card reveal">
+            <h3>新品一</h3>
+            
+          </div>
+          <div class="feature-card reveal">
+            <h3>新品二</h3>
+            
+          </div>
+          <div class="feature-card reveal">
+            <h3>新品三</h3>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="product-3d">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">3D SHOWCASE</span>
+          <h2>3D產品展示</h2>
+          <p>
+            放入 3D 模型、互動式旋轉展示、產品結構分解圖。
+          </p>
+        </div>
+
+        <div class="showcase-3d">
+          <div class="showcase-view reveal">
+            <div class="showcase-placeholder">3D</div>
+          </div>
+
+          <div class="showcase-info reveal">
+            <h3>互動式展示區</h3>
+            <p>
+              整合 360 度旋轉模型、產品拆解圖與細節說明，
+              
+            </p>
+
+            <div class="showcase-tags">
+              <span>360°</span>
+              <span>互動模型</span>
+              <span>結構展示</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="offers">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">LIMITED OFFER</span>
+          <h2>限定優惠</h2>
+          <p>
+            限時折扣、特定商品優惠
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card reveal">
+            <h3>優惠方案 A</h3>
+            <p>限定價格。</p>
+          </div>
+          <div class="feature-card reveal">
+            <h3>優惠方案 B</h3>
+            <p>限定價格。</p>
+          </div>
+          <div class="feature-card reveal">
+            <h3>優惠方案 C</h3>
+            <p>限定價格。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="catalog">
+      <div class="container">
+        <div class="catalog-card reveal">
+          <div>
+            <h2>目錄下載</h2>
+            <p>
+              提供最新產品型錄、主力商品資訊與規格資料，
+              方便客戶快速查閱與下載。
+            </p>
+          </div>
+
+          <div class="catalog-actions">
+            <a href="files/Product_catalog.PDF" class="btn btn-white" download>下載最新目錄</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">CONTACT</span>
+          <h2>聯絡我們</h2>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-card reveal">
+            <h3>聯絡資訊</h3>
+
+            <div class="contact-list">
+              <div class="contact-item">
+                <strong>炳昌五金</strong>
+                <span>Bing Chang Hardware Co., Ltd.</span>
+              </div>
+
+              <div class="contact-item">
+                <strong>電話</strong>
+                <span>(04)781-2540</span>
+              </div>
+
+              <div class="contact-item">
+                <strong>Email</strong>
+                <span>sales@honcho.com.tw</span>
+              </div>
+
+              <div class="contact-item">
+                <strong>地址</strong>
+                <span>彰化縣50544鹿港鎮彰濱工業區工業西五路20號</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form reveal">
+            <h3>快速詢問</h3>
+
+            <form class="form-grid">
+              <input type="text" placeholder="您的姓名" />
+              <input type="email" placeholder="Email" />
+              <input type="text" placeholder="聯絡電話" />
+              <textarea placeholder="請輸入您的需求內容"></textarea>
+              <button type="submit" class="btn btn-primary">送出詢問</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>© 2026 Bing Chang Hardware Co., Ltd.. All Rights Reserved.</div>
+      <div class="footer-links">
+        <a href="#about">公司簡介</a>
+        <a href="#new-products">新品專區</a>
+        <a href="#product-3d">3D產品展示</a>
+        <a href="#offers">限定優惠</a>
+        <a href="order.html">訂購</a>
+        <a href="#catalog">型錄下載</a>
+        <a href="#contact">聯絡我們</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 右側滑出面板 -->
+  <div class="side-panel" id="sidePanel">
+    <a href="#new-products">新品專區</a>
+    <a href="#product-3d">3D產品展示</a>
+    <a href="#offers">限定優惠</a>
+    <a href="#about">公司簡介</a>
+    <a href="#catalog">型錄下載</a>
+    <a href="order.html">訂購</a>
+    <a href="#contact">聯絡我們</a>
+    <a href="#top">回到頂部</a>
+  </div>
+
+  <!-- 右側箭頭按鈕 -->
+  <div class="side-toggle" id="sideToggle" aria-label="展開功能">
+    <img src="images/arrow.jpg" alt="arrow">
+  </div>
+
+  <script>
+    const navbar = document.getElementById("navbar");
+    const heroBg = document.getElementById("heroBg");
+    const menuToggle = document.getElementById("menuToggle");
+    const menu = document.getElementById("menu");
+    const sideToggle = document.getElementById("sideToggle");
+    const sidePanel = document.getElementById("sidePanel");
+
+    if (menuToggle && menu) {
+      menuToggle.addEventListener("click", () => {
+        menu.classList.toggle("open");
+      });
+
+      document.querySelectorAll(".menu a").forEach(link => {
+        link.addEventListener("click", () => {
+          menu.classList.remove("open");
+        });
+      });
+    }
+
+    function updateEffects() {
+      const scrollY = window.scrollY;
+
+      if (navbar) {
+        if (scrollY > 20) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      }
+
+      if (heroBg) {
+        const moveY = scrollY * 0.16;
+        heroBg.style.transform = `scale(1.03) translateY(${moveY}px)`;
+      }
+    }
+
+    window.addEventListener("scroll", updateEffects, { passive: true });
+    window.addEventListener("resize", updateEffects);
+    updateEffects();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.14
+    });
+
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+    const form = document.querySelector(".contact-form form");
+    if (form) {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        alert("這裡目前是前端示意表單，可再幫你串接實際寄信或後端送出功能。");
+      });
+    }
+
+    if (sideToggle && sidePanel) {
+      sideToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        sidePanel.classList.toggle("open");
+        sideToggle.classList.toggle("active");
+      });
+
+      sidePanel.addEventListener("click", (e) => {
+        e.stopPropagation();
+      });
+
+      document.addEventListener("click", (e) => {
+        const clickedInsidePanel = sidePanel.contains(e.target);
+        const clickedToggle = sideToggle.contains(e.target);
+
+        if (!clickedInsidePanel && !clickedToggle) {
+          sidePanel.classList.remove("open");
+          sideToggle.classList.remove("active");
+        }
+      });
+
+      document.querySelectorAll(".side-panel a").forEach(link => {
+        link.addEventListener("click", () => {
+          sidePanel.classList.remove("open");
+          sideToggle.classList.remove("active");
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>

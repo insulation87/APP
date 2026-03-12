@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>炳昌｜訂購系統</title>
+  <style>
+    :root {
+      --primary: #1c36b7;
+      --primary-dark: #12257f;
+      --accent: #d40000;
+      --text: #111111;
+      --text-light: #5f6470;
+      --bg: #f5f7fb;
+      --white: #ffffff;
+      --line: rgba(0, 0, 0, 0.08);
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --nav-h: 88px;
+      --sidebar-w: 220px;
+      --max-width: 1440px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .container {
+      width: min(var(--max-width), calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    /* ===== TOP NAV ===== */
+    .top-nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: var(--nav-h);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      z-index: 1000;
+    }
+
+    .top-nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .top-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-weight: 800;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .top-links a {
+      position: relative;
+    }
+
+    .top-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    .top-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ===== LOGIN ===== */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 24px 40px;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(28, 54, 183, 0.08), transparent 20%),
+        radial-gradient(circle at 82% 22%, rgba(28, 54, 183, 0.08), transparent 20%),
+        linear-gradient(180deg, #ffffff 0%, #eef2fb 100%);
+    }
+
+    .login-card {
+      width: min(460px, 100%);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: var(--radius-xl);
+      padding: 42px 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .login-card h1 {
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .login-card p {
+      text-align: center;
+      color: var(--text-light);
+      margin-bottom: 28px;
+    }
+
+    .login-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-weight: 800;
+    }
+
+    .form-group input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 14px;
+      padding: 0 14px;
+      background: #fff;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    .form-group input:focus {
+      border-color: rgba(28, 54, 183, 0.4);
+      box-shadow: 0 0 0 4px rgba(28, 54, 183, 0.08);
+    }
+
+    .login-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-weight: 900;
+      transition: 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(28, 54, 183, 0.22);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--text);
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-secondary:hover {
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-danger {
+      background: #fff1f1;
+      color: #b90000;
+      border-color: rgba(185, 0, 0, 0.12);
+    }
+
+    /* ===== ORDER APP ===== */
+    .order-app {
+      padding-top: var(--nav-h);
+      min-height: 100vh;
+    }
+
+    .order-shell {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      min-height: calc(100vh - var(--nav-h));
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #5f6676 0%, #4d5566 100%);
+      color: #fff;
+      padding: 24px 16px 28px;
+      position: sticky;
+      top: var(--nav-h);
+      height: calc(100vh - var(--nav-h));
+      overflow: auto;
+    }
+
+    .sidebar-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--accent);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .category-list {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .category-btn {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: #fff;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .category-btn:hover,
+    .category-btn.active {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .main-area {
+      min-width: 0;
+      background: var(--bg);
+    }
+
+    .order-topbar {
+      position: sticky;
+      top: var(--nav-h);
+      z-index: 100;
+      background: rgba(245, 247, 251, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-left: auto;
+    }
+
+    .search-wrap {
+      width: min(340px, 42vw);
+      height: 44px;
+      border-radius: 999px;
+      background: #6d7280;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      color: #fff;
+    }
+
+    .search-wrap span {
+      margin-right: 8px;
+      font-size: 1rem;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+    }
+
+    .search-wrap input::placeholder {
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .cart-btn {
+      position: relative;
+      border: none;
+      background: #fff;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      font-size: 1.35rem;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+    }
+
+    .content {
+      padding: 26px 24px 34px;
+    }
+
+    .product-section {
+      display: block;
+    }
+
+    .section-head {
+      margin-bottom: 22px;
+    }
+
+    .section-head h2 {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .section-head p {
+      color: var(--text-light);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .product-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      transition: 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(28, 54, 183, 0.16);
+      box-shadow: var(--shadow);
+    }
+
+    .product-thumb {
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #edf2fd 0%, #dbe5ff 100%);
+      border: 1px solid rgba(28, 54, 183, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .product-name {
+      font-weight: 900;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .product-meta {
+      font-size: 0.92rem;
+      color: var(--text-light);
+    }
+
+    .detail-view {
+      display: none;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .detail-layout {
+      background: #fff;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 30px;
+    }
+
+    .detail-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #edf2fd 0%, #dbe5ff 100%);
+      border: 1px solid rgba(28, 54, 183, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--primary);
+    }
+
+    .detail-info h2 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .detail-code {
+      color: var(--text-light);
+      margin-bottom: 22px;
+      font-weight: 700;
+    }
+
+    .spec-groups {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .spec-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .spec-label {
+      min-width: 62px;
+      font-weight: 900;
+    }
+
+    .spec-btn {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .spec-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .qty-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .qty-box {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .qty-box button {
+      width: 38px;
+      height: 38px;
+      border: none;
+      background: #eef2fb;
+      cursor: pointer;
+      font-weight: 900;
+      color: var(--primary);
+    }
+
+    .qty-box span {
+      width: 50px;
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .detail-buy-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .detail-desc {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--text-light);
+      white-space: pre-line;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.24);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.28s ease;
+      z-index: 1100;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -430px;
+      width: min(420px, 100%);
+      height: 100vh;
+      background: #fff;
+      box-shadow: -18px 0 50px rgba(0, 0, 0, 0.14);
+      z-index: 1200;
+      transition: right 0.34s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-drawer.open {
+      right: 0;
+    }
+
+    .cart-header {
+      padding: 22px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-header h3 {
+      font-size: 1.7rem;
+      font-weight: 900;
+    }
+
+    .cart-close {
+      border: none;
+      background: transparent;
+      font-size: 1.9rem;
+      cursor: pointer;
+    }
+
+    .cart-body {
+      flex: 1;
+      overflow: auto;
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .cart-item {
+      background: #f9fbff;
+      border: 1px solid rgba(28, 54, 183, 0.06);
+      border-radius: 18px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 76px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .cart-thumb {
+      width: 76px;
+      height: 76px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #edf2fd 0%, #dbe5ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-weight: 900;
+    }
+
+    .cart-item h4 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .cart-meta {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .cart-qty {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 8px;
+      background: #fff;
+    }
+
+    .cart-qty button {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: #eef2fb;
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .cart-qty span {
+      width: 34px;
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .remove-btn {
+      border: none;
+      background: transparent;
+      color: #b90000;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .cart-footer {
+      border-top: 1px solid var(--line);
+      padding: 18px 20px 22px;
+      display: grid;
+      gap: 14px;
+      background: #fff;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.08rem;
+      font-weight: 900;
+    }
+
+    .cart-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .cart-actions .btn {
+      flex: 1;
+    }
+
+    .empty-cart {
+      color: var(--text-light);
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    @media (max-width: 1200px) {
+      .product-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 980px) {
+      .order-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        top: 0;
+        height: auto;
+      }
+
+      .category-list {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .detail-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .top-nav-inner,
+      .order-topbar {
+        flex-wrap: wrap;
+      }
+
+      .top-links {
+        gap: 16px;
+      }
+
+      .search-wrap {
+        width: 100%;
+      }
+
+      .category-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        width: min(var(--max-width), calc(100% - 28px));
+      }
+
+      .login-card {
+        padding: 34px 22px;
+      }
+
+      .content {
+        padding: 18px 14px 24px;
+      }
+
+      .order-topbar {
+        padding: 14px;
+      }
+
+      .page-title {
+        font-size: 1.45rem;
+      }
+
+      .product-grid {
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-nav">
+    <div class="container top-nav-inner">
+      <a href="index.html" class="brand">炳昌</a>
+      <nav class="top-links">
+        <a href="index.html">回首頁</a>
+        <a href="#" id="goToProductsTop">商品列表</a>
+        <a href="#" id="goToCartTop">購物車</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="login-page" id="loginPage">
+    <div class="login-card">
+      <h1>訂購系統</h1>
+      <p>請先登入後進入炳昌訂購平台</p>
+
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label for="account">帳號</label>
+          <input id="account" type="text" placeholder="請輸入帳號" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">密碼</label>
+          <input id="password" type="password" placeholder="請輸入密碼" required />
+        </div>
+
+        <div class="login-actions">
+          <button type="submit" class="btn btn-primary" style="flex:1;">登入</button>
+          <a href="index.html" class="btn btn-secondary" style="flex:1;">返回首頁</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="order-app hidden" id="orderApp">
+    <div class="order-shell">
+      <aside class="sidebar">
+        <div class="sidebar-title">商品分類</div>
+        <ul class="category-list" id="categoryList"></ul>
+      </aside>
+
+      <div class="main-area">
+        <div class="order-topbar">
+          <div class="page-title" id="pageTitle">商品列表</div>
+
+          <div class="topbar-actions">
+            <div class="search-wrap">
+              <span>🔍</span>
+              <input type="text" id="searchInput" placeholder="搜尋商品名稱 / 編號" />
+            </div>
+
+            <button class="cart-btn" id="openCartBtn" aria-label="購物車">
+              🛒
+              <span class="cart-count" id="cartCount">0</span>
+            </button>
+          </div>
+        </div>
+
+        <main class="content">
+          <section class="product-section" id="productSection">
+            <div class="section-head">
+              <h2 id="sectionTitle">商品列表</h2>
+              <p>請選擇商品分類或直接搜尋產品名稱。</p>
+            </div>
+            <div class="product-grid" id="productGrid"></div>
+          </section>
+
+          <section class="detail-view" id="detailView">
+            <div class="detail-actions">
+              <button class="btn btn-secondary" id="backToListBtn">← 返回列表</button>
+            </div>
+
+            <div class="detail-layout">
+              <div class="detail-image" id="detailImage">商品照</div>
+
+              <div class="detail-info">
+                <h2 id="detailName">商品名稱</h2>
+                <div class="detail-code" id="detailCode">商品編號</div>
+
+                <div class="spec-groups">
+                  <div class="spec-row">
+                    <span class="spec-label">尺寸</span>
+                    <div id="sizeOptions"></div>
+                  </div>
+
+                  <div class="spec-row">
+                    <span class="spec-label">顏色</span>
+                    <div id="colorOptions"></div>
+                  </div>
+                </div>
+
+                <div class="qty-row">
+                  <span class="spec-label">數量</span>
+                  <div class="qty-box">
+                    <button type="button" id="qtyMinus">-</button>
+                    <span id="qtyValue">1</span>
+                    <button type="button" id="qtyPlus">+</button>
+                  </div>
+                </div>
+
+                <div class="detail-buy-actions">
+                  <button class="btn btn-primary" id="addToCartBtn">加入購物車</button>
+                  <button class="btn btn-secondary" id="buyNowBtn">立即下單</button>
+                </div>
+
+                <div class="detail-desc" id="detailDesc"></div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>購物車</h3>
+      <button class="cart-close" id="closeCartBtn">×</button>
+    </div>
+
+    <div class="cart-body" id="cartBody"></div>
+
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>總件數</span>
+        <span id="cartTotalQty">0</span>
+      </div>
+
+      <div class="cart-actions">
+        <button class="btn btn-danger" id="clearCartBtn">清空購物車</button>
+        <button class="btn btn-primary" id="checkoutBtn">送出訂單</button>
+      </div>
+    </div>
+  </aside>
+
+  <script>
+    const categories = [
+      "全部",
+      "樹剪",
+      "衛浴",
+      "動力線/延長線",
+      "夾子",
+      "鎖",
+      "螺絲起子",
+      "板手",
+      "噴漆/油漆",
+      "刷子",
+      "門鎖",
+      "捲尺",
+      "電腦用品",
+      "建材類",
+      "水管",
+      "鏟子",
+      "其他"
+    ];
+
+    const products = [
+      { id: 1, category: "樹剪", name: "高強度樹剪 A", code: "A-01", imageText: "商品照", sizes: ["S","M","L"], colors: ["紅","黑"], desc: "適用園藝修枝與日常工作使用。\n刀片鋒利，握感穩定，適合長時間操作。" },
+      { id: 2, category: "樹剪", name: "專業樹剪 B", code: "B-02", imageText: "商品照", sizes: ["M","L"], colors: ["黑","灰"], desc: "專業等級枝剪，結構耐用。\n適合較高強度的修枝需求。" },
+      { id: 3, category: "鎖", name: "安全掛鎖", code: "L-01", imageText: "商品照", sizes: ["30mm","40mm","50mm"], colors: ["銀","黑"], desc: "耐用鎖芯設計，適用多種門櫃情境。" },
+      { id: 4, category: "螺絲起子", name: "十字起子", code: "D-01", imageText: "商品照", sizes: ["小","中","大"], colors: ["黑黃"], desc: "符合人體工學握把，日常維修方便使用。" },
+      { id: 5, category: "板手", name: "工業板手", code: "W-01", imageText: "商品照", sizes: ["8mm","10mm","12mm"], colors: ["銀"], desc: "高硬度材質製作，適合工業與維修使用。" },
+      { id: 6, category: "水管", name: "耐壓水管", code: "P-01", imageText: "商品照", sizes: ["1尺","3尺","5尺"], colors: ["綠","藍"], desc: "柔韌耐用，適合一般供水與灌溉環境。" },
+      { id: 7, category: "滴管", name: "精密滴管", code: "T-01", imageText: "商品照", sizes: ["細口","標準"], colors: ["透明"], desc: "小量控制方便，適合精密滴注使用。" },
+      { id: 8, category: "夾子", name: "固定夾子", code: "C-01", imageText: "商品照", sizes: ["小","中","大"], colors: ["白","黑"], desc: "管線整理固定更方便，安裝快速。" },
+      { id: 9, category: "捲尺", name: "工程捲尺", code: "M-01", imageText: "商品照", sizes: ["3M","5M","8M"], colors: ["黃黑"], desc: "刻度清楚，回彈順暢，適用多種丈量需求。" },
+      { id: 10, category: "刷子", name: "清潔刷", code: "BR-01", imageText: "商品照", sizes: ["小","中","大"], colors: ["白","藍"], desc: "多用途刷具，可用於一般清潔或施工輔助。" },
+      { id: 11, category: "門鎖", name: "防盜門鎖", code: "DL-01", imageText: "商品照", sizes: ["標準"], colors: ["銀","黑"], desc: "適合住宅與商用門片，安裝便利。" },
+      { id: 12, category: "鏟子", name: "園藝鏟", code: "S-01", imageText: "商品照", sizes: ["小","中"], colors: ["綠","黑"], desc: "適合園藝翻土與日常作業使用。" },
+      { id: 13, category: "動力線/延長線", name: "動力線", code: "SD-01", imageText: "商品照", sizes: ["30米","20米"], colors: ["綠","紅","藍"], desc: "延長電源，長距離更靈活" }
+    ];
+
+    const loginPage = document.getElementById("loginPage");
+    const orderApp = document.getElementById("orderApp");
+    const loginForm = document.getElementById("loginForm");
+
+    const categoryList = document.getElementById("categoryList");
+    const searchInput = document.getElementById("searchInput");
+    const productGrid = document.getElementById("productGrid");
+    const sectionTitle = document.getElementById("sectionTitle");
+    const pageTitle = document.getElementById("pageTitle");
+
+    const productSection = document.getElementById("productSection");
+    const detailView = document.getElementById("detailView");
+    const backToListBtn = document.getElementById("backToListBtn");
+
+    const detailImage = document.getElementById("detailImage");
+    const detailName = document.getElementById("detailName");
+    const detailCode = document.getElementById("detailCode");
+    const detailDesc = document.getElementById("detailDesc");
+    const sizeOptions = document.getElementById("sizeOptions");
+    const colorOptions = document.getElementById("colorOptions");
+    const qtyValue = document.getElementById("qtyValue");
+    const qtyMinus = document.getElementById("qtyMinus");
+    const qtyPlus = document.getElementById("qtyPlus");
+    const addToCartBtn = document.getElementById("addToCartBtn");
+    const buyNowBtn = document.getElementById("buyNowBtn");
+
+    const openCartBtn = document.getElementById("openCartBtn");
+    const closeCartBtn = document.getElementById("closeCartBtn");
+    const cartDrawer = document.getElementById("cartDrawer");
+    const overlay = document.getElementById("overlay");
+    const cartBody = document.getElementById("cartBody");
+    const cartCount = document.getElementById("cartCount");
+    const cartTotalQty = document.getElementById("cartTotalQty");
+    const clearCartBtn = document.getElementById("clearCartBtn");
+    const checkoutBtn = document.getElementById("checkoutBtn");
+    const goToProductsTop = document.getElementById("goToProductsTop");
+    const goToCartTop = document.getElementById("goToCartTop");
+
+    let currentCategory = "全部";
+    let currentSearch = "";
+    let selectedProduct = null;
+    let selectedSize = "";
+    let selectedColor = "";
+    let selectedQty = 1;
+    let cart = [];
+
+    function renderCategories() {
+      categoryList.innerHTML = "";
+      categories.forEach(category => {
+        const li = document.createElement("li");
+        const btn = document.createElement("button");
+        btn.className = "category-btn";
+        if (category === currentCategory) btn.classList.add("active");
+        btn.textContent = category;
+        btn.addEventListener("click", () => {
+          currentCategory = category;
+          renderCategories();
+          renderProducts();
+          showProductList();
+        });
+        li.appendChild(btn);
+        categoryList.appendChild(li);
+      });
+    }
+
+    function getFilteredProducts() {
+      return products.filter(product => {
+        const categoryMatch = currentCategory === "全部" || product.category === currentCategory;
+        const keyword = currentSearch.toLowerCase();
+        const searchMatch =
+          product.name.toLowerCase().includes(keyword) ||
+          product.code.toLowerCase().includes(keyword) ||
+          product.category.toLowerCase().includes(keyword);
+        return categoryMatch && searchMatch;
+      });
+    }
+
+    function renderProducts() {
+      const filtered = getFilteredProducts();
+      const title = currentCategory === "全部" ? "商品列表" : currentCategory;
+      sectionTitle.textContent = title;
+      pageTitle.textContent = title;
+      productGrid.innerHTML = "";
+
+      if (!filtered.length) {
+        productGrid.innerHTML = `<div class="empty-cart">找不到符合條件的商品</div>`;
+        return;
+      }
+
+      filtered.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-thumb">${product.imageText}</div>
+          <div class="product-name">${product.name}</div>
+          <div class="product-meta">分類：${product.category}</div>
+          <div class="product-meta">編號：${product.code}</div>
+        `;
+        card.addEventListener("click", () => openProductDetail(product.id));
+        productGrid.appendChild(card);
+      });
+    }
+
+    function renderOptionButtons(container, options, activeValue, onClick) {
+      container.innerHTML = "";
+      options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "spec-btn";
+        if (option === activeValue) btn.classList.add("active");
+        btn.textContent = option;
+        btn.addEventListener("click", () => onClick(option));
+        container.appendChild(btn);
+      });
+    }
+
+    function openProductDetail(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      selectedProduct = product;
+      selectedSize = product.sizes[0] || "";
+      selectedColor = product.colors[0] || "";
+      selectedQty = 1;
+
+      detailImage.textContent = product.imageText;
+      detailName.textContent = product.name;
+      detailCode.textContent = `商品編號：${product.code}`;
+      detailDesc.textContent = `商品分類：${product.category}\n\n${product.desc}`;
+      qtyValue.textContent = selectedQty;
+
+      const setSize = (value) => {
+        selectedSize = value;
+        renderOptionButtons(sizeOptions, product.sizes, selectedSize, setSize);
+      };
+
+      const setColor = (value) => {
+        selectedColor = value;
+        renderOptionButtons(colorOptions, product.colors, selectedColor, setColor);
+      };
+
+      renderOptionButtons(sizeOptions, product.sizes, selectedSize, setSize);
+      renderOptionButtons(colorOptions, product.colors, selectedColor, setColor);
+
+      productSection.style.display = "none";
+      detailView.style.display = "block";
+      pageTitle.textContent = "商品詳細";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showProductList() {
+      detailView.style.display = "none";
+      productSection.style.display = "block";
+      pageTitle.textContent = currentCategory === "全部" ? "商品列表" : currentCategory;
+    }
+
+    function addToCart(product, size, color, qty) {
+      const existed = cart.find(item =>
+        item.id === product.id &&
+        item.size === size &&
+        item.color === color
+      );
+
+      if (existed) {
+        existed.qty += qty;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          code: product.code,
+          imageText: product.imageText,
+          size,
+          color,
+          qty
+        });
+      }
+
+      renderCart();
+    }
+
+    function renderCart() {
+      cartBody.innerHTML = "";
+
+      if (!cart.length) {
+        cartBody.innerHTML = `<div class="empty-cart">購物車目前沒有商品</div>`;
+      } else {
+        cart.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "cart-item";
+          div.innerHTML = `
+            <div class="cart-thumb">${item.imageText}</div>
+            <div>
+              <h4>${item.name}</h4>
+              <div class="cart-meta">編號：${item.code}</div>
+              <div class="cart-meta">尺寸：${item.size} / 顏色：${item.color}</div>
+              <div class="cart-qty">
+                <button type="button" data-action="minus" data-index="${index}">-</button>
+                <span>${item.qty}</span>
+                <button type="button" data-action="plus" data-index="${index}">+</button>
+              </div>
+            </div>
+            <button class="remove-btn" data-action="remove" data-index="${index}">刪除</button>
+          `;
+          cartBody.appendChild(div);
+        });
+      }
+
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      cartCount.textContent = totalQty;
+      cartTotalQty.textContent = totalQty;
+    }
+
+    function openCart() {
+      cartDrawer.classList.add("open");
+      overlay.classList.add("show");
+    }
+
+    function closeCart() {
+      cartDrawer.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      loginPage.classList.add("hidden");
+      orderApp.classList.remove("hidden");
+      renderCategories();
+      renderProducts();
+      renderCart();
+    });
+
+    searchInput.addEventListener("input", (e) => {
+      currentSearch = e.target.value.trim();
+      renderProducts();
+      showProductList();
+    });
+
+    backToListBtn.addEventListener("click", showProductList);
+
+    qtyMinus.addEventListener("click", () => {
+      if (selectedQty > 1) {
+        selectedQty--;
+        qtyValue.textContent = selectedQty;
+      }
+    });
+
+    qtyPlus.addEventListener("click", () => {
+      selectedQty++;
+      qtyValue.textContent = selectedQty;
+    });
+
+    addToCartBtn.addEventListener("click", () => {
+      if (!selectedProduct) return;
+      addToCart(selectedProduct, selectedSize, selectedColor, selectedQty);
+      openCart();
+    });
+
+    buyNowBtn.addEventListener("click", () => {
+      if (!selectedProduct) return;
+      addToCart(selectedProduct, selectedSize, selectedColor, selectedQty);
+      openCart();
+    });
+
+    openCartBtn.addEventListener("click", openCart);
+    closeCartBtn.addEventListener("click", closeCart);
+    overlay.addEventListener("click", closeCart);
+
+    cartBody.addEventListener("click", (e) => {
+      const target = e.target;
+      const action = target.dataset.action;
+      const index = Number(target.dataset.index);
+
+      if (Number.isNaN(index)) return;
+
+      if (action === "minus") {
+        if (cart[index].qty > 1) cart[index].qty--;
+      } else if (action === "plus") {
+        cart[index].qty++;
+      } else if (action === "remove") {
+        cart.splice(index, 1);
+      }
+
+      renderCart();
+    });
+
+    clearCartBtn.addEventListener("click", () => {
+      cart = [];
+      renderCart();
+    });
+
+    checkoutBtn.addEventListener("click", () => {
+      if (!cart.length) {
+        alert("購物車目前沒有商品");
+        return;
+      }
+
+      const summary = cart.map(item =>
+        `${item.name} / ${item.size} / ${item.color} / 數量 ${item.qty}`
+      ).join("\n");
+
+      alert(`訂單已送出（前端示意）\n\n${summary}`);
+      cart = [];
+      renderCart();
+      closeCart();
+    });
+
+    goToProductsTop.addEventListener("click", (e) => {
+      e.preventDefault();
+      showProductList();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    goToCartTop.addEventListener("click", (e) => {
+      e.preventDefault();
+      openCart();
+    });
+  </script>
+</body>
+</html>
