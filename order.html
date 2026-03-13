@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -585,6 +584,101 @@
       white-space: pre-line;
     }
 
+    /* ===== HISTORY ===== */
+    .history-view {
+      display: none;
+    }
+
+    .history-layout {
+      background: #fff;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    .history-head {
+      margin-bottom: 20px;
+    }
+
+    .history-head h2 {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .history-head p {
+      color: var(--text-light);
+    }
+
+    .history-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .history-card {
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 20px;
+      background: #f9fbff;
+      padding: 18px;
+    }
+
+    .history-order-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .history-order-title {
+      font-size: 1.1rem;
+      font-weight: 900;
+    }
+
+    .history-order-date {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .history-items {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .history-item {
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(28, 54, 183, 0.08);
+    }
+
+    .history-item-name {
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .history-item-meta {
+      font-size: 0.92rem;
+      color: var(--text-light);
+    }
+
+    .history-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .empty-history {
+      text-align: center;
+      color: var(--text-light);
+      padding: 40px 20px;
+      background: #fff;
+      border-radius: 18px;
+      border: 1px dashed rgba(0, 0, 0, 0.12);
+    }
+
     .overlay {
       position: fixed;
       inset: 0;
@@ -835,7 +929,6 @@
     }
 
     @media (max-width: 760px) {
-
       .top-nav-inner,
       .order-topbar {
         flex-wrap: wrap;
@@ -858,7 +951,6 @@
       }
     }
 
-    /* ===== 手機版 ===== */
     @media (max-width: 560px) {
       body {
         background: #cfcfcf;
@@ -1132,6 +1224,20 @@
         gap: 8px;
       }
 
+      .history-layout {
+        padding: 18px;
+        border-radius: 16px;
+      }
+
+      .history-head h2 {
+        font-size: 1.5rem;
+      }
+
+      .history-order-top {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
       .cart-drawer {
         width: 100%;
         right: -100%;
@@ -1143,7 +1249,6 @@
     }
   </style>
 </head>
-
 <body>
   <header class="top-nav">
     <div class="container top-nav-inner">
@@ -1151,6 +1256,7 @@
       <nav class="top-links">
         <a href="index.html">回首頁</a>
         <a href="#" id="goToProductsTop">商品列表</a>
+        <a href="#" id="goToHistoryTop">曾經購買過</a>
         <a href="#" id="goToCartTop">購物車</a>
       </nav>
     </div>
@@ -1270,6 +1376,21 @@
               </div>
             </div>
           </section>
+
+          <section class="history-view" id="historyView">
+            <div class="detail-actions">
+              <button class="btn btn-secondary" id="backFromHistoryBtn">← 返回商品列表</button>
+            </div>
+
+            <div class="history-layout">
+              <div class="history-head">
+                <h2>曾經購買過</h2>
+                <p>可查看歷史訂單，並快速再次加入購物車。</p>
+              </div>
+
+              <div class="history-list" id="historyList"></div>
+            </div>
+          </section>
         </main>
       </div>
     </div>
@@ -1302,6 +1423,7 @@
     <button class="menu-close" id="closeMenuBtn">×</button>
     <a href="index.html">回首頁</a>
     <button type="button" id="menuProductsBtn">商品列表</button>
+    <button type="button" id="menuHistoryBtn">曾經購買過</button>
     <button type="button" id="menuCartBtn">購物車</button>
     <button type="button" id="menuLogoutBtn">登出</button>
   </aside>
@@ -1331,19 +1453,19 @@
     ];
 
     const products = [
-      { id: 1, category: "樹剪", name: "高強度樹剪 A", code: "A-01", imageText: "商品圖", image: "", sizes: ["S", "M", "L"], colors: ["紅", "黑"], desc: "適用園藝修枝與日常工作使用。\n刀片鋒利，握感穩定，適合長時間操作。" },
-      { id: 2, category: "樹剪", name: "專業樹剪 B", code: "B-02", imageText: "商品圖", image: "", sizes: ["M", "L"], colors: ["黑", "灰"], desc: "專業等級枝剪，結構耐用。\n適合較高強度的修枝需求。" },
-      { id: 3, category: "鎖", name: "安全掛鎖", code: "L-01", imageText: "商品圖", image: "", sizes: ["30mm", "40mm", "50mm"], colors: ["銀", "黑"], desc: "耐用鎖芯設計，適用多種門櫃情境。" },
-      { id: 4, category: "螺絲起子", name: "十字起子", code: "D-01", imageText: "商品圖", image: "", sizes: ["小", "中", "大"], colors: ["黑黃"], desc: "符合人體工學握把，日常維修方便使用。" },
-      { id: 5, category: "板手", name: "工業板手", code: "W-01", imageText: "商品圖", image: "", sizes: ["8mm", "10mm", "12mm"], colors: ["銀"], desc: "高硬度材質製作，適合工業與維修使用。" },
-      { id: 6, category: "水管", name: "耐壓水管", code: "P-01", imageText: "商品圖", image: "", sizes: ["1尺", "3尺", "5尺"], colors: ["綠", "藍"], desc: "柔韌耐用，適合一般供水與灌溉環境。" },
-      { id: 7, category: "束帶", name: "耐用束帶", code: "T-01", imageText: "商品圖", image: "", sizes: ["細", "中", "粗"], colors: ["黑", "白"], desc: "管線整理固定更方便，安裝快速。" },
-      { id: 8, category: "夾子", name: "固定夾子", code: "C-01", imageText: "商品圖", image: "", sizes: ["小", "中", "大"], colors: ["白", "黑"], desc: "日常固定用途，安裝快速。" },
-      { id: 9, category: "捲尺", name: "工程捲尺", code: "M-01", imageText: "商品圖", image: "", sizes: ["3M", "5M", "8M"], colors: ["黃黑"], desc: "刻度清楚，回彈順暢，適用多種丈量需求。" },
-      { id: 10, category: "刷子", name: "清潔刷", code: "BR-01", imageText: "商品圖", image: "", sizes: ["小", "中", "大"], colors: ["白", "藍"], desc: "多用途刷具，可用於一般清潔或施工輔助。" },
-      { id: 11, category: "門鎖", name: "防盜門鎖", code: "DL-01", imageText: "商品圖", image: "", sizes: ["標準"], colors: ["銀", "黑"], desc: "適合住宅與商用門片，安裝便利。" },
-      { id: 12, category: "鏟子", name: "園藝鏟", code: "S-01", imageText: "商品圖", image: "", sizes: ["小", "中"], colors: ["綠", "黑"], desc: "適合園藝翻土與日常作業使用。" },
-      { id: 13, category: "動力線/延長線", name: "動力線", code: "SD-01", imageText: "商品圖", image: "", sizes: ["20米", "30米"], colors: ["綠", "紅", "藍"], desc: "延長電源，長距離更靈活。" },
+      { id: 1, category: "樹剪", name: "高強度樹剪 A", code: "A-01", imageText: "商品圖", image: "", sizes: ["S","M","L"], colors: ["紅","黑"], desc: "適用園藝修枝與日常工作使用。\n刀片鋒利，握感穩定，適合長時間操作。" },
+      { id: 2, category: "樹剪", name: "專業樹剪 B", code: "B-02", imageText: "商品圖", image: "", sizes: ["M","L"], colors: ["黑","灰"], desc: "專業等級枝剪，結構耐用。\n適合較高強度的修枝需求。" },
+      { id: 3, category: "鎖", name: "安全掛鎖", code: "L-01", imageText: "商品圖", image: "", sizes: ["30mm","40mm","50mm"], colors: ["銀","黑"], desc: "耐用鎖芯設計，適用多種門櫃情境。" },
+      { id: 4, category: "螺絲起子", name: "十字起子", code: "D-01", imageText: "商品圖", image: "", sizes: ["小","中","大"], colors: ["黑黃"], desc: "符合人體工學握把，日常維修方便使用。" },
+      { id: 5, category: "板手", name: "工業板手", code: "W-01", imageText: "商品圖", image: "", sizes: ["8mm","10mm","12mm"], colors: ["銀"], desc: "高硬度材質製作，適合工業與維修使用。" },
+      { id: 6, category: "水管", name: "耐壓水管", code: "P-01", imageText: "商品圖", image: "", sizes: ["1尺","3尺","5尺"], colors: ["綠","藍"], desc: "柔韌耐用，適合一般供水與灌溉環境。" },
+      { id: 7, category: "束帶", name: "耐用束帶", code: "T-01", imageText: "商品圖", image: "", sizes: ["細","中","粗"], colors: ["黑","白"], desc: "管線整理固定更方便，安裝快速。" },
+      { id: 8, category: "夾子", name: "固定夾子", code: "C-01", imageText: "商品圖", image: "", sizes: ["小","中","大"], colors: ["白","黑"], desc: "日常固定用途，安裝快速。" },
+      { id: 9, category: "捲尺", name: "工程捲尺", code: "M-01", imageText: "商品圖", image: "", sizes: ["3M","5M","8M"], colors: ["黃黑"], desc: "刻度清楚，回彈順暢，適用多種丈量需求。" },
+      { id: 10, category: "刷子", name: "清潔刷", code: "BR-01", imageText: "商品圖", image: "", sizes: ["小","中","大"], colors: ["白","藍"], desc: "多用途刷具，可用於一般清潔或施工輔助。" },
+      { id: 11, category: "門鎖", name: "防盜門鎖", code: "DL-01", imageText: "商品圖", image: "", sizes: ["標準"], colors: ["銀","黑"], desc: "適合住宅與商用門片，安裝便利。" },
+      { id: 12, category: "鏟子", name: "園藝鏟", code: "S-01", imageText: "商品圖", image: "", sizes: ["小","中"], colors: ["綠","黑"], desc: "適合園藝翻土與日常作業使用。" },
+      { id: 13, category: "動力線/延長線", name: "動力線", code: "SD-01", imageText: "商品圖", image: "", sizes: ["20米","30米"], colors: ["綠","紅","藍"], desc: "延長電源，長距離更靈活。" },
       { id: 14, category: "燈", name: "工作燈", code: "LG-01", imageText: "商品圖", image: "", sizes: ["標準"], colors: ["黑"], desc: "施工照明與作業補光使用。" },
       { id: 15, category: "衛浴", name: "衛浴配件組", code: "BT-01", imageText: "商品圖", image: "", sizes: ["標準"], colors: ["銀"], desc: "適合衛浴空間安裝與更換。" }
     ];
@@ -1362,6 +1484,10 @@
     const productSection = document.getElementById("productSection");
     const detailView = document.getElementById("detailView");
     const backToListBtn = document.getElementById("backToListBtn");
+
+    const historyView = document.getElementById("historyView");
+    const historyList = document.getElementById("historyList");
+    const backFromHistoryBtn = document.getElementById("backFromHistoryBtn");
 
     const detailImage = document.getElementById("detailImage");
     const detailName = document.getElementById("detailName");
@@ -1387,12 +1513,14 @@
     const clearCartBtn = document.getElementById("clearCartBtn");
     const checkoutBtn = document.getElementById("checkoutBtn");
     const goToProductsTop = document.getElementById("goToProductsTop");
+    const goToHistoryTop = document.getElementById("goToHistoryTop");
     const goToCartTop = document.getElementById("goToCartTop");
 
     const mobileMenuBtn = document.getElementById("mobileMenuBtn");
     const menuDrawer = document.getElementById("menuDrawer");
     const closeMenuBtn = document.getElementById("closeMenuBtn");
     const menuProductsBtn = document.getElementById("menuProductsBtn");
+    const menuHistoryBtn = document.getElementById("menuHistoryBtn");
     const menuCartBtn = document.getElementById("menuCartBtn");
     const menuLogoutBtn = document.getElementById("menuLogoutBtn");
 
@@ -1403,6 +1531,7 @@
     let selectedColor = "";
     let selectedQty = 1;
     let cart = [];
+    let currentUser = "";
 
     function isMobileView() {
       return window.innerWidth <= 560;
@@ -1545,7 +1674,6 @@
           `;
 
           card.appendChild(createMobileStepper(product));
-
           card.addEventListener("click", () => {
             openProductDetail(product.id);
           });
@@ -1556,7 +1684,6 @@
             <div class="product-meta">分類：${product.category}</div>
             <div class="product-meta">編號：${product.code}</div>
           `;
-
           card.addEventListener("click", () => openProductDetail(product.id));
         }
 
@@ -1606,6 +1733,7 @@
       renderOptionButtons(colorOptions, product.colors, selectedColor, setColor);
 
       productSection.style.display = "none";
+      historyView.style.display = "none";
       detailView.style.display = "block";
       pageTitle.textContent = "商品詳細";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1613,6 +1741,7 @@
 
     function showProductList() {
       detailView.style.display = "none";
+      historyView.style.display = "none";
       productSection.style.display = "block";
       pageTitle.textContent = currentCategory === "全部" ? "商品列表" : currentCategory;
     }
@@ -1678,6 +1807,121 @@
       cartTotalQty.textContent = totalQty;
     }
 
+    function getHistoryStorageKey() {
+      return `order_history_${currentUser}`;
+    }
+
+    function getOrderHistory() {
+      if (!currentUser) return [];
+      try {
+        return JSON.parse(localStorage.getItem(getHistoryStorageKey())) || [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveOrderHistory(history) {
+      if (!currentUser) return;
+      localStorage.setItem(getHistoryStorageKey(), JSON.stringify(history));
+    }
+
+    function saveCurrentOrderToHistory() {
+      if (!cart.length || !currentUser) return;
+
+      const history = getOrderHistory();
+
+      const orderData = {
+        orderId: `ORD-${Date.now()}`,
+        createdAt: new Date().toLocaleString("zh-Hant-TW", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        }),
+        items: cart.map(item => ({
+          id: item.id,
+          name: item.name,
+          code: item.code,
+          image: item.image || "",
+          imageText: item.imageText || "商品圖",
+          size: item.size || "",
+          color: item.color || "",
+          qty: item.qty
+        }))
+      };
+
+      history.unshift(orderData);
+      saveOrderHistory(history);
+    }
+
+    function renderHistory() {
+      historyList.innerHTML = "";
+
+      const history = getOrderHistory();
+
+      if (!history.length) {
+        historyList.innerHTML = `<div class="empty-history">目前還沒有購買紀錄</div>`;
+        return;
+      }
+
+      history.forEach(order => {
+        const card = document.createElement("div");
+        card.className = "history-card";
+
+        const itemsHTML = order.items.map(item => `
+          <div class="history-item">
+            <div class="history-item-name">${item.name}</div>
+            <div class="history-item-meta">編號：${item.code}</div>
+            <div class="history-item-meta">尺寸：${item.size || "-"} / 顏色：${item.color || "-"} / 數量：${item.qty}</div>
+          </div>
+        `).join("");
+
+        card.innerHTML = `
+          <div class="history-order-top">
+            <div class="history-order-title">訂單編號：${order.orderId}</div>
+            <div class="history-order-date">${order.createdAt}</div>
+          </div>
+          <div class="history-items">${itemsHTML}</div>
+          <div class="history-actions">
+            <button class="btn btn-primary" data-history-order="${order.orderId}">再次購買這筆訂單</button>
+          </div>
+        `;
+
+        historyList.appendChild(card);
+      });
+    }
+
+    function showHistoryView() {
+      productSection.style.display = "none";
+      detailView.style.display = "none";
+      historyView.style.display = "block";
+      pageTitle.textContent = "曾經購買過";
+      renderHistory();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function buyHistoryOrder(orderId) {
+      const history = getOrderHistory();
+      const order = history.find(item => item.orderId === orderId);
+      if (!order) return;
+
+      order.items.forEach(historyItem => {
+        const product = products.find(p => p.id === historyItem.id);
+        if (!product) return;
+
+        addToCart(
+          product,
+          historyItem.size || "",
+          historyItem.color || "",
+          historyItem.qty || 1
+        );
+      });
+
+      renderProducts();
+      openCart();
+    }
+
     function openCart() {
       cartDrawer.classList.add("open");
       overlay.classList.add("show");
@@ -1708,11 +1952,18 @@
 
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
+
+      const accountInput = document.getElementById("account");
+      currentUser = accountInput.value.trim() || "guest";
+
       loginPage.classList.add("hidden");
       orderApp.classList.remove("hidden");
+
       renderCategories();
       renderProducts();
       renderCart();
+      renderHistory();
+      showProductList();
     });
 
     searchInput.addEventListener("input", (e) => {
@@ -1722,6 +1973,7 @@
     });
 
     backToListBtn.addEventListener("click", showProductList);
+    backFromHistoryBtn.addEventListener("click", showProductList);
 
     qtyMinus.addEventListener("click", () => {
       if (selectedQty > 1) {
@@ -1779,6 +2031,12 @@
       renderProducts();
     });
 
+    historyList.addEventListener("click", (e) => {
+      const orderId = e.target.dataset.historyOrder;
+      if (!orderId) return;
+      buyHistoryOrder(orderId);
+    });
+
     clearCartBtn.addEventListener("click", () => {
       cart = [];
       renderCart();
@@ -1795,10 +2053,14 @@
         `${item.name} / ${item.size || "-"} / ${item.color || "-"} / 數量 ${item.qty}`
       ).join("\n");
 
+      saveCurrentOrderToHistory();
+
       alert(`訂單已送出（前端示意）\n\n${summary}`);
+
       cart = [];
       renderCart();
       renderProducts();
+      renderHistory();
       closeCart();
     });
 
@@ -1806,6 +2068,11 @@
       e.preventDefault();
       showProductList();
       window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    goToHistoryTop.addEventListener("click", (e) => {
+      e.preventDefault();
+      showHistoryView();
     });
 
     goToCartTop.addEventListener("click", (e) => {
@@ -1819,6 +2086,11 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
+    menuHistoryBtn.addEventListener("click", () => {
+      closeMenu();
+      showHistoryView();
+    });
+
     menuCartBtn.addEventListener("click", () => {
       closeMenu();
       openCart();
@@ -1826,6 +2098,9 @@
 
     menuLogoutBtn.addEventListener("click", () => {
       closeAllPanels();
+      currentUser = "";
+      cart = [];
+      renderCart();
       orderApp.classList.add("hidden");
       loginPage.classList.remove("hidden");
     });
@@ -1840,5 +2115,4 @@
     });
   </script>
 </body>
-
 </html>
