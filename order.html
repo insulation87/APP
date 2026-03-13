@@ -50,7 +50,9 @@
     }
 
     button,
-    input {
+    input,
+    textarea,
+    select {
       font: inherit;
     }
 
@@ -99,11 +101,18 @@
       justify-content: flex-end;
     }
 
-    .top-links a {
+    .top-links a,
+    .top-links button {
       position: relative;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: inherit;
+      font-weight: 800;
     }
 
-    .top-links a::after {
+    .top-links a::after,
+    .top-links button::after {
       content: "";
       position: absolute;
       left: 0;
@@ -115,7 +124,8 @@
       transition: width 0.25s ease;
     }
 
-    .top-links a:hover::after {
+    .top-links a:hover::after,
+    .top-links button:hover::after {
       width: 100%;
     }
 
@@ -167,18 +177,27 @@
       font-weight: 800;
     }
 
-    .form-group input {
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
       width: 100%;
-      height: 48px;
+      min-height: 48px;
       border: 1px solid rgba(0, 0, 0, 0.12);
       border-radius: 14px;
-      padding: 0 14px;
+      padding: 12px 14px;
       background: #fff;
       outline: none;
       transition: 0.2s ease;
     }
 
-    .form-group input:focus {
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
       border-color: rgba(28, 54, 183, 0.4);
       box-shadow: 0 0 0 4px rgba(28, 54, 183, 0.08);
     }
@@ -187,6 +206,13 @@
       display: flex;
       gap: 12px;
       margin-top: 8px;
+    }
+
+    .login-hint {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      text-align: center;
+      margin-top: 10px;
     }
 
     /* ===== BUTTONS ===== */
@@ -234,7 +260,8 @@
     }
 
     /* ===== ORDER APP ===== */
-    .order-app {
+    .order-app,
+    .admin-app {
       padding-top: var(--nav-h);
       min-height: 100vh;
     }
@@ -292,7 +319,8 @@
       background: var(--bg);
     }
 
-    .order-topbar {
+    .order-topbar,
+    .admin-topbar {
       position: sticky;
       top: var(--nav-h);
       z-index: 100;
@@ -376,7 +404,8 @@
       padding: 0 5px;
     }
 
-    .content {
+    .content,
+    .admin-content {
       padding: 26px 24px 34px;
     }
 
@@ -459,6 +488,7 @@
       display: flex;
       gap: 12px;
       margin-bottom: 18px;
+      flex-wrap: wrap;
     }
 
     .detail-layout {
@@ -543,6 +573,7 @@
       align-items: center;
       gap: 12px;
       margin-bottom: 22px;
+      flex-wrap: wrap;
     }
 
     .qty-box {
@@ -679,6 +710,102 @@
       border: 1px dashed rgba(0, 0, 0, 0.12);
     }
 
+    /* ===== ADMIN ===== */
+    .admin-layout {
+      display: grid;
+      gap: 24px;
+    }
+
+    .admin-panel,
+    .admin-list-panel {
+      background: #fff;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    .admin-panel h2,
+    .admin-list-panel h2 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .admin-panel p,
+    .admin-list-panel p {
+      color: var(--text-light);
+      margin-bottom: 18px;
+    }
+
+    .admin-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .admin-help {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .admin-products {
+      display: grid;
+      gap: 14px;
+    }
+
+    .admin-product-row {
+      display: grid;
+      grid-template-columns: 100px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 18px;
+      background: #f9fbff;
+    }
+
+    .admin-product-thumb {
+      width: 100px;
+      height: 100px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #edf2fd 0%, #dbe5ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-weight: 900;
+      overflow: hidden;
+      border: 1px solid rgba(28, 54, 183, 0.08);
+    }
+
+    .admin-product-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .admin-product-title {
+      font-size: 1.08rem;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .admin-product-meta {
+      color: var(--text-light);
+      font-size: 0.92rem;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* ===== OVERLAY / DRAWERS ===== */
     .overlay {
       position: fixed;
       inset: 0;
@@ -926,11 +1053,24 @@
       .detail-layout {
         grid-template-columns: 1fr;
       }
+
+      .admin-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-product-row {
+        grid-template-columns: 80px 1fr;
+      }
+
+      .admin-actions {
+        grid-column: 1 / -1;
+      }
     }
 
     @media (max-width: 760px) {
       .top-nav-inner,
-      .order-topbar {
+      .order-topbar,
+      .admin-topbar {
         flex-wrap: wrap;
       }
 
@@ -964,7 +1104,8 @@
         display: none;
       }
 
-      .order-app {
+      .order-app,
+      .admin-app {
         padding-top: 0;
       }
 
@@ -985,8 +1126,13 @@
         display: none;
       }
 
-      .content {
+      .content,
+      .admin-content {
         padding: calc(var(--mobile-header-h) + var(--mobile-category-h) + 12px) 12px 20px;
+      }
+
+      .admin-content {
+        padding-top: calc(var(--mobile-header-h) + 12px);
       }
 
       .mobile-header {
@@ -1224,12 +1370,16 @@
         gap: 8px;
       }
 
-      .history-layout {
+      .history-layout,
+      .admin-panel,
+      .admin-list-panel {
         padding: 18px;
         border-radius: 16px;
       }
 
-      .history-head h2 {
+      .history-head h2,
+      .admin-panel h2,
+      .admin-list-panel h2 {
         font-size: 1.5rem;
       }
 
@@ -1253,11 +1403,12 @@
   <header class="top-nav">
     <div class="container top-nav-inner">
       <a href="index.html" class="brand">炳昌</a>
-      <nav class="top-links">
+      <nav class="top-links" id="desktopNav">
         <a href="index.html">回首頁</a>
-        <a href="#" id="goToProductsTop">商品列表</a>
-        <a href="#" id="goToHistoryTop">曾經購買過</a>
-        <a href="#" id="goToCartTop">購物車</a>
+        <button type="button" id="goToProductsTop">商品列表</button>
+        <button type="button" id="goToHistoryTop">曾經購買過</button>
+        <button type="button" id="goToCartTop">購物車</button>
+        <button type="button" id="goToAdminTop" class="hidden">後台管理</button>
       </nav>
     </div>
   </header>
@@ -1282,6 +1433,8 @@
           <button type="submit" class="btn btn-primary" style="flex:1;">登入</button>
           <a href="index.html" class="btn btn-secondary" style="flex:1;">返回首頁</a>
         </div>
+
+        <div class="login-hint">管理員測試帳號：c417 / Ab80070225</div>
       </form>
     </div>
   </section>
@@ -1396,6 +1549,88 @@
     </div>
   </section>
 
+  <section class="admin-app hidden" id="adminApp">
+    <div class="mobile-header">
+      <div class="mobile-brand">炳昌</div>
+      <div class="mobile-header-actions">
+        <button class="mobile-icon-btn menu" id="mobileAdminMenuBtn" aria-label="選單">☰</button>
+      </div>
+    </div>
+
+    <div class="main-area">
+      <div class="admin-topbar">
+        <div class="page-title">後台管理</div>
+        <div class="topbar-actions">
+          <button class="btn btn-secondary" id="adminBackToShopBtn">前往前台</button>
+          <button class="btn btn-danger" id="adminLogoutBtn">管理員登出</button>
+        </div>
+      </div>
+
+      <main class="admin-content">
+        <div class="admin-layout">
+          <section class="admin-panel">
+            <h2>新增產品</h2>
+            <p>可新增商品分類、名稱、編號、規格、圖片路徑與描述。</p>
+
+            <form class="admin-form" id="adminProductForm">
+              <div class="admin-form-grid">
+                <div class="form-group">
+                  <label for="adminCategory">分類</label>
+                  <input id="adminCategory" type="text" placeholder="例如：樹剪" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="adminName">商品名稱</label>
+                  <input id="adminName" type="text" placeholder="例如：專業樹剪 C" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="adminCode">商品編號</label>
+                  <input id="adminCode" type="text" placeholder="例如：C-03" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="adminImage">圖片路徑</label>
+                  <input id="adminImage" type="text" placeholder="例如：images/products/c03.jpg" />
+                </div>
+
+                <div class="form-group">
+                  <label for="adminSizes">尺寸</label>
+                  <input id="adminSizes" type="text" placeholder="例如：S,M,L 或 30mm,40mm" />
+                </div>
+
+                <div class="form-group">
+                  <label for="adminColors">顏色</label>
+                  <input id="adminColors" type="text" placeholder="例如：紅,黑,銀" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="adminDesc">商品描述</label>
+                <textarea id="adminDesc" placeholder="請輸入商品介紹"></textarea>
+              </div>
+
+              <div class="admin-help">
+                尺寸、顏色請用逗號分隔，例如：S,M,L
+              </div>
+
+              <div class="detail-actions">
+                <button type="submit" class="btn btn-primary">新增產品</button>
+                <button type="button" class="btn btn-secondary" id="adminResetBtn">清空欄位</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="admin-list-panel">
+            <h2>目前商品清單</h2>
+            <p>管理員可直接刪除商品。刪除後會同步更新前台商品清單。</p>
+            <div class="admin-products" id="adminProductsList"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </section>
+
   <div class="overlay" id="overlay"></div>
 
   <aside class="cart-drawer" id="cartDrawer">
@@ -1425,34 +1660,22 @@
     <button type="button" id="menuProductsBtn">商品列表</button>
     <button type="button" id="menuHistoryBtn">曾經購買過</button>
     <button type="button" id="menuCartBtn">購物車</button>
+    <button type="button" id="menuAdminBtn" class="hidden">後台管理</button>
     <button type="button" id="menuLogoutBtn">登出</button>
   </aside>
 
-  <script>
-    const categories = [
-      "全部",
-      "裝潢",
-      "衛浴",
-      "動力線/延長線",
-      "束帶",
-      "燈",
-      "樹剪",
-      "夾子",
-      "鎖",
-      "螺絲起子",
-      "板手",
-      "噴漆/油漆",
-      "刷子",
-      "門鎖",
-      "捲尺",
-      "電腦用品",
-      "建材類",
-      "水管",
-      "鏟子",
-      "其他"
-    ];
+  <aside class="menu-drawer" id="adminMenuDrawer">
+    <button class="menu-close" id="closeAdminMenuBtn">×</button>
+    <button type="button" id="adminMenuToShopBtn">前往前台</button>
+    <button type="button" id="adminMenuLogoutBtn">管理員登出</button>
+  </aside>
 
-    const products = [
+  <script>
+    const ADMIN_ACCOUNT = "c417";
+    const ADMIN_PASSWORD = "Ab80070225";
+    const PRODUCTS_STORAGE_KEY = "bingchang_products_v1";
+
+    const defaultProducts = [
       { id: 1, category: "樹剪", name: "高強度樹剪 A", code: "A-01", imageText: "商品圖", image: "", sizes: ["S","M","L"], colors: ["紅","黑"], desc: "適用園藝修枝與日常工作使用。\n刀片鋒利，握感穩定，適合長時間操作。" },
       { id: 2, category: "樹剪", name: "專業樹剪 B", code: "B-02", imageText: "商品圖", image: "", sizes: ["M","L"], colors: ["黑","灰"], desc: "專業等級枝剪，結構耐用。\n適合較高強度的修枝需求。" },
       { id: 3, category: "鎖", name: "安全掛鎖", code: "L-01", imageText: "商品圖", image: "", sizes: ["30mm","40mm","50mm"], colors: ["銀","黑"], desc: "耐用鎖芯設計，適用多種門櫃情境。" },
@@ -1470,8 +1693,11 @@
       { id: 15, category: "衛浴", name: "衛浴配件組", code: "BT-01", imageText: "商品圖", image: "", sizes: ["標準"], colors: ["銀"], desc: "適合衛浴空間安裝與更換。" }
     ];
 
+    let products = loadProducts();
+
     const loginPage = document.getElementById("loginPage");
     const orderApp = document.getElementById("orderApp");
+    const adminApp = document.getElementById("adminApp");
     const loginForm = document.getElementById("loginForm");
 
     const categoryList = document.getElementById("categoryList");
@@ -1515,6 +1741,7 @@
     const goToProductsTop = document.getElementById("goToProductsTop");
     const goToHistoryTop = document.getElementById("goToHistoryTop");
     const goToCartTop = document.getElementById("goToCartTop");
+    const goToAdminTop = document.getElementById("goToAdminTop");
 
     const mobileMenuBtn = document.getElementById("mobileMenuBtn");
     const menuDrawer = document.getElementById("menuDrawer");
@@ -1522,7 +1749,28 @@
     const menuProductsBtn = document.getElementById("menuProductsBtn");
     const menuHistoryBtn = document.getElementById("menuHistoryBtn");
     const menuCartBtn = document.getElementById("menuCartBtn");
+    const menuAdminBtn = document.getElementById("menuAdminBtn");
     const menuLogoutBtn = document.getElementById("menuLogoutBtn");
+
+    const adminProductForm = document.getElementById("adminProductForm");
+    const adminProductsList = document.getElementById("adminProductsList");
+    const adminBackToShopBtn = document.getElementById("adminBackToShopBtn");
+    const adminLogoutBtn = document.getElementById("adminLogoutBtn");
+    const adminResetBtn = document.getElementById("adminResetBtn");
+
+    const adminCategory = document.getElementById("adminCategory");
+    const adminName = document.getElementById("adminName");
+    const adminCode = document.getElementById("adminCode");
+    const adminImage = document.getElementById("adminImage");
+    const adminSizes = document.getElementById("adminSizes");
+    const adminColors = document.getElementById("adminColors");
+    const adminDesc = document.getElementById("adminDesc");
+
+    const mobileAdminMenuBtn = document.getElementById("mobileAdminMenuBtn");
+    const adminMenuDrawer = document.getElementById("adminMenuDrawer");
+    const closeAdminMenuBtn = document.getElementById("closeAdminMenuBtn");
+    const adminMenuToShopBtn = document.getElementById("adminMenuToShopBtn");
+    const adminMenuLogoutBtn = document.getElementById("adminMenuLogoutBtn");
 
     let currentCategory = "全部";
     let currentSearch = "";
@@ -1532,6 +1780,28 @@
     let selectedQty = 1;
     let cart = [];
     let currentUser = "";
+    let isAdmin = false;
+
+    function loadProducts() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY));
+        if (Array.isArray(saved) && saved.length) {
+          return saved;
+        }
+      } catch (error) {}
+      localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(defaultProducts));
+      return [...defaultProducts];
+    }
+
+    function saveProducts() {
+      localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(products));
+    }
+
+    function getUniqueCategories() {
+      const builtIn = ["全部"];
+      const productCategories = [...new Set(products.map(item => item.category).filter(Boolean))];
+      return builtIn.concat(productCategories.filter(cat => cat !== "全部"));
+    }
 
     function isMobileView() {
       return window.innerWidth <= 560;
@@ -1544,7 +1814,31 @@
       return product.imageText || "商品圖";
     }
 
+    function parseCommaValues(text) {
+      return text
+        .split(",")
+        .map(item => item.trim())
+        .filter(Boolean);
+    }
+
+    function refreshAllProductRelatedUI() {
+      renderCategories();
+      renderProducts();
+      renderAdminProducts();
+    }
+
+    function updateAdminButtonsVisibility() {
+      if (isAdmin) {
+        goToAdminTop.classList.remove("hidden");
+        menuAdminBtn.classList.remove("hidden");
+      } else {
+        goToAdminTop.classList.add("hidden");
+        menuAdminBtn.classList.add("hidden");
+      }
+    }
+
     function renderCategories() {
+      const categories = getUniqueCategories();
       categoryList.innerHTML = "";
       mobileCategoryList.innerHTML = "";
 
@@ -1575,6 +1869,10 @@
         });
         mobileCategoryList.appendChild(mobileBtn);
       });
+
+      if (!categories.includes(currentCategory)) {
+        currentCategory = "全部";
+      }
     }
 
     function getFilteredProducts() {
@@ -1922,10 +2220,92 @@
       openCart();
     }
 
+    function showAdminApp() {
+      loginPage.classList.add("hidden");
+      orderApp.classList.add("hidden");
+      adminApp.classList.remove("hidden");
+      updateAdminButtonsVisibility();
+      renderAdminProducts();
+      closeAllPanels();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showShopApp() {
+      loginPage.classList.add("hidden");
+      adminApp.classList.add("hidden");
+      orderApp.classList.remove("hidden");
+      updateAdminButtonsVisibility();
+      refreshAllProductRelatedUI();
+      renderCart();
+      renderHistory();
+      showProductList();
+      closeAllPanels();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function resetAdminForm() {
+      adminProductForm.reset();
+    }
+
+    function getNextProductId() {
+      if (!products.length) return 1;
+      return Math.max(...products.map(item => Number(item.id) || 0)) + 1;
+    }
+
+    function renderAdminProducts() {
+      adminProductsList.innerHTML = "";
+
+      if (!products.length) {
+        adminProductsList.innerHTML = `<div class="empty-history">目前沒有商品</div>`;
+        return;
+      }
+
+      products.forEach(product => {
+        const row = document.createElement("div");
+        row.className = "admin-product-row";
+        row.innerHTML = `
+          <div class="admin-product-thumb">${product.image ? `<img src="${product.image}" alt="${product.name}">` : (product.imageText || "商品圖")}</div>
+          <div>
+            <div class="admin-product-title">${product.name}</div>
+            <div class="admin-product-meta">分類：${product.category}</div>
+            <div class="admin-product-meta">編號：${product.code}</div>
+            <div class="admin-product-meta">尺寸：${(product.sizes || []).join(", ") || "-"}</div>
+            <div class="admin-product-meta">顏色：${(product.colors || []).join(", ") || "-"}</div>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-danger" data-delete-product="${product.id}">刪除商品</button>
+          </div>
+        `;
+        adminProductsList.appendChild(row);
+      });
+    }
+
+    function deleteProduct(productId) {
+      const product = products.find(item => item.id === productId);
+      if (!product) return;
+
+      const confirmed = confirm(`確定要刪除商品「${product.name}」嗎？`);
+      if (!confirmed) return;
+
+      products = products.filter(item => item.id !== productId);
+      saveProducts();
+
+      if (selectedProduct && selectedProduct.id === productId) {
+        selectedProduct = null;
+        showProductList();
+      }
+
+      cart = cart.filter(item => item.id !== productId);
+      renderCart();
+      refreshAllProductRelatedUI();
+      alert("商品已刪除");
+    }
+
     function openCart() {
       cartDrawer.classList.add("open");
       overlay.classList.add("show");
       menuDrawer.classList.remove("open");
+      adminMenuDrawer.classList.remove("open");
     }
 
     function closeCart() {
@@ -1937,6 +2317,14 @@
       menuDrawer.classList.add("open");
       overlay.classList.add("show");
       cartDrawer.classList.remove("open");
+      adminMenuDrawer.classList.remove("open");
+    }
+
+    function openAdminMenu() {
+      adminMenuDrawer.classList.add("open");
+      overlay.classList.add("show");
+      cartDrawer.classList.remove("open");
+      menuDrawer.classList.remove("open");
     }
 
     function closeMenu() {
@@ -1944,26 +2332,33 @@
       overlay.classList.remove("show");
     }
 
+    function closeAdminMenu() {
+      adminMenuDrawer.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+
     function closeAllPanels() {
       cartDrawer.classList.remove("open");
       menuDrawer.classList.remove("open");
+      adminMenuDrawer.classList.remove("open");
       overlay.classList.remove("show");
     }
 
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const accountInput = document.getElementById("account");
-      currentUser = accountInput.value.trim() || "guest";
+      const accountInput = document.getElementById("account").value.trim();
+      const passwordInput = document.getElementById("password").value.trim();
 
-      loginPage.classList.add("hidden");
-      orderApp.classList.remove("hidden");
+      currentUser = accountInput || "guest";
+      isAdmin = accountInput === ADMIN_ACCOUNT && passwordInput === ADMIN_PASSWORD;
 
-      renderCategories();
-      renderProducts();
-      renderCart();
-      renderHistory();
-      showProductList();
+      if (isAdmin) {
+        showAdminApp();
+        return;
+      }
+
+      showShopApp();
     });
 
     searchInput.addEventListener("input", (e) => {
@@ -2005,6 +2400,9 @@
 
     mobileMenuBtn.addEventListener("click", openMenu);
     closeMenuBtn.addEventListener("click", closeMenu);
+
+    mobileAdminMenuBtn.addEventListener("click", openAdminMenu);
+    closeAdminMenuBtn.addEventListener("click", closeAdminMenu);
 
     overlay.addEventListener("click", closeAllPanels);
 
@@ -2066,53 +2464,141 @@
 
     goToProductsTop.addEventListener("click", (e) => {
       e.preventDefault();
-      showProductList();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      showShopApp();
     });
 
     goToHistoryTop.addEventListener("click", (e) => {
       e.preventDefault();
+      showShopApp();
       showHistoryView();
     });
 
     goToCartTop.addEventListener("click", (e) => {
       e.preventDefault();
+      showShopApp();
       openCart();
+    });
+
+    goToAdminTop.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (!isAdmin) return;
+      showAdminApp();
     });
 
     menuProductsBtn.addEventListener("click", () => {
       closeMenu();
-      showProductList();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      showShopApp();
     });
 
     menuHistoryBtn.addEventListener("click", () => {
       closeMenu();
+      showShopApp();
       showHistoryView();
     });
 
     menuCartBtn.addEventListener("click", () => {
       closeMenu();
+      showShopApp();
       openCart();
     });
 
-    menuLogoutBtn.addEventListener("click", () => {
+    menuAdminBtn.addEventListener("click", () => {
+      closeMenu();
+      if (!isAdmin) return;
+      showAdminApp();
+    });
+
+    function handleLogout() {
       closeAllPanels();
       currentUser = "";
+      isAdmin = false;
       cart = [];
+      selectedProduct = null;
+      currentSearch = "";
+      currentCategory = "全部";
       renderCart();
+      loginForm.reset();
       orderApp.classList.add("hidden");
+      adminApp.classList.add("hidden");
       loginPage.classList.remove("hidden");
+      updateAdminButtonsVisibility();
+    }
+
+    menuLogoutBtn.addEventListener("click", handleLogout);
+    adminLogoutBtn.addEventListener("click", handleLogout);
+    adminMenuLogoutBtn.addEventListener("click", handleLogout);
+
+    adminBackToShopBtn.addEventListener("click", () => {
+      showShopApp();
+    });
+
+    adminMenuToShopBtn.addEventListener("click", () => {
+      closeAdminMenu();
+      showShopApp();
+    });
+
+    adminResetBtn.addEventListener("click", resetAdminForm);
+
+    adminProductForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const category = adminCategory.value.trim();
+      const name = adminName.value.trim();
+      const code = adminCode.value.trim();
+      const image = adminImage.value.trim();
+      const sizes = parseCommaValues(adminSizes.value.trim());
+      const colors = parseCommaValues(adminColors.value.trim());
+      const desc = adminDesc.value.trim();
+
+      if (!category || !name || !code) {
+        alert("請至少填寫分類、商品名稱、商品編號");
+        return;
+      }
+
+      const codeExists = products.some(item => item.code.toLowerCase() === code.toLowerCase());
+      if (codeExists) {
+        alert("商品編號已存在，請更換新的編號");
+        return;
+      }
+
+      const newProduct = {
+        id: getNextProductId(),
+        category,
+        name,
+        code,
+        imageText: "商品圖",
+        image,
+        sizes: sizes.length ? sizes : ["標準"],
+        colors: colors.length ? colors : ["標準"],
+        desc: desc || "尚未填寫商品描述。"
+      };
+
+      products.push(newProduct);
+      saveProducts();
+      refreshAllProductRelatedUI();
+      resetAdminForm();
+      alert("商品新增成功");
+    });
+
+    adminProductsList.addEventListener("click", (e) => {
+      const productId = Number(e.target.dataset.deleteProduct);
+      if (Number.isNaN(productId)) return;
+      deleteProduct(productId);
     });
 
     window.addEventListener("resize", () => {
       renderCategories();
       renderProducts();
+      renderAdminProducts();
 
-      if (!isMobileView() && menuDrawer.classList.contains("open")) {
-        closeMenu();
+      if (!isMobileView()) {
+        menuDrawer.classList.remove("open");
+        adminMenuDrawer.classList.remove("open");
+        overlay.classList.remove("show");
       }
     });
+
+    updateAdminButtonsVisibility();
   </script>
 </body>
 </html>
