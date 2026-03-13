@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,11 +10,11 @@
       --primary: #1c36b7;
       --primary-dark: #12257f;
       --accent: #d40000;
-      --text: #111111;
+      --text: #231815;
       --text-light: #5f6470;
-      --bg: #f5f7fb;
+      --bg: #d9d9d9;
       --white: #ffffff;
-      --line: rgba(0, 0, 0, 0.08);
+      --line: rgba(0, 0, 0, 0.12);
       --shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
       --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
       --radius-xl: 32px;
@@ -22,6 +23,8 @@
       --nav-h: 88px;
       --sidebar-w: 220px;
       --max-width: 1440px;
+      --mobile-header-h: 110px;
+      --mobile-category-h: 74px;
     }
 
     * {
@@ -66,7 +69,7 @@
       position: fixed;
       inset: 0 0 auto 0;
       height: var(--nav-h);
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
       z-index: 1000;
@@ -429,6 +432,13 @@
       font-size: 1.2rem;
       font-weight: 900;
       margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .product-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .product-name {
@@ -442,8 +452,37 @@
       color: var(--text-light);
     }
 
-    .detail-view {
-      display: none;
+    @media (max-width: 560px) {
+      .detail-view {
+        display: none;
+      }
+
+      .detail-layout {
+        grid-template-columns: 1fr;
+        padding: 18px;
+        border-radius: 16px;
+      }
+
+      .detail-image {
+        aspect-ratio: 1 / 1;
+        border-radius: 12px;
+      }
+
+      .detail-info h2 {
+        font-size: 1.5rem;
+      }
+
+      .detail-actions {
+        margin-bottom: 12px;
+      }
+
+      .detail-buy-actions {
+        flex-direction: column;
+      }
+
+      .detail-buy-actions .btn {
+        width: 100%;
+      }
     }
 
     .detail-actions {
@@ -474,6 +513,13 @@
       font-size: 2rem;
       font-weight: 900;
       color: var(--primary);
+      overflow: hidden;
+    }
+
+    .detail-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .detail-info h2 {
@@ -650,6 +696,13 @@
       justify-content: center;
       color: var(--primary);
       font-weight: 900;
+      overflow: hidden;
+    }
+
+    .cart-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .cart-item h4 {
@@ -726,6 +779,59 @@
       padding: 40px 20px;
     }
 
+    .menu-drawer {
+      position: fixed;
+      top: 0;
+      right: -280px;
+      width: min(260px, 82vw);
+      height: 100vh;
+      background: #fff;
+      z-index: 1250;
+      box-shadow: -18px 0 50px rgba(0, 0, 0, 0.14);
+      padding: 90px 18px 18px;
+      transition: right 0.32s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .menu-drawer.open {
+      right: 0;
+    }
+
+    .menu-drawer a,
+    .menu-drawer button {
+      border: none;
+      background: #f4f6fb;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-weight: 800;
+      text-align: left;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .menu-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #f2f4f8;
+      font-size: 1.4rem;
+      line-height: 1;
+      text-align: center;
+    }
+
+    /* ===== MOBILE APP STYLE ===== */
+    .mobile-header,
+    .mobile-category-bar,
+    .mobile-product-info,
+    .mobile-stepper {
+      display: none;
+    }
+
     @media (max-width: 1200px) {
       .product-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -757,6 +863,7 @@
     }
 
     @media (max-width: 760px) {
+
       .top-nav-inner,
       .order-topbar {
         flex-wrap: wrap;
@@ -779,33 +886,252 @@
       }
     }
 
+    /* ===== 手機版改成接近你圖片的樣式 ===== */
     @media (max-width: 560px) {
+      body {
+        background: #cfcfcf;
+      }
+
       .container {
-        width: min(var(--max-width), calc(100% - 28px));
+        width: 100%;
       }
 
-      .login-card {
-        padding: 34px 22px;
+      .top-nav {
+        display: none;
       }
 
-      .content {
-        padding: 18px 14px 24px;
+      .order-app {
+        padding-top: 0;
+      }
+
+      .order-shell {
+        display: block;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .main-area {
+        background: #cfcfcf;
       }
 
       .order-topbar {
-        padding: 14px;
+        display: none;
       }
 
-      .page-title {
-        font-size: 1.45rem;
+      .content {
+        padding: calc(var(--mobile-header-h) + var(--mobile-category-h) + 12px) 12px 20px;
+      }
+
+      .mobile-header {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--mobile-header-h);
+        background: #efefef;
+        z-index: 1000;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .mobile-brand {
+        font-size: 3rem;
+        font-weight: 900;
+        color: #ef0000;
+        letter-spacing: 2px;
+        line-height: 1;
+        transform: skew(-8deg);
+      }
+
+      .mobile-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .mobile-icon-btn {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        color: #3a2620;
+        position: relative;
+        width: 52px;
+        height: 52px;
+        display: grid;
+        place-items: center;
+        font-size: 2rem;
+      }
+
+      .mobile-icon-btn.menu {
+        background: #9e9e9e;
+        color: #2b1a15;
+        border-radius: 2px;
+        width: 64px;
+        height: 64px;
+        font-size: 2rem;
+        font-weight: 900;
+      }
+
+      .mobile-icon-btn .cart-count {
+        top: 2px;
+        right: 0;
+      }
+
+      .mobile-category-bar {
+        display: block;
+        position: fixed;
+        top: var(--mobile-header-h);
+        left: 0;
+        right: 0;
+        height: var(--mobile-category-h);
+        background: #a6a6a6;
+        z-index: 999;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .mobile-category-scroll {
+        display: inline-flex;
+        min-width: max-content;
+        height: 100%;
+        align-items: center;
+        padding: 0 14px;
+        gap: 26px;
+      }
+
+      .mobile-cat-btn {
+        border: none;
+        background: transparent;
+        color: #2b1a15;
+        font-weight: 900;
+        font-size: 1.2rem;
+        cursor: pointer;
+        white-space: nowrap;
+        padding: 8px 0;
+      }
+
+      .mobile-cat-btn.active {
+        color: #d40000;
+      }
+
+      .section-head {
+        display: none;
       }
 
       .product-grid {
-        gap: 12px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px 14px;
+      }
+
+      .product-card {
+        background: #f7f7f7;
+        border: 1px solid rgba(60, 40, 30, 0.45);
+        border-radius: 0;
+        box-shadow: none;
+        padding: 10px 10px 12px;
+      }
+
+      .product-card:hover {
+        transform: none;
+        border-color: rgba(60, 40, 30, 0.45);
+        box-shadow: none;
+      }
+
+      .product-thumb {
+        aspect-ratio: 1.05 / 0.72;
+        border-radius: 0;
+        margin-bottom: 8px;
+        background: #8f8f8f;
+        border: 1px solid rgba(60, 40, 30, 0.55);
+        color: #2b1a15;
+        font-size: 1.05rem;
+      }
+
+      .product-name {
+        text-align: center;
+        font-size: 1.05rem;
+        font-weight: 900;
+        color: #2b1a15;
+        margin-bottom: 8px;
+        min-height: 2.8em;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .product-meta {
+        display: none;
+      }
+
+      .mobile-product-info {
+        display: block;
+        text-align: center;
+      }
+
+      .mobile-code {
+        font-size: 0.82rem;
+        color: #5f6470;
+        margin-bottom: 6px;
+      }
+
+      .mobile-stepper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 2px;
+      }
+
+      .mobile-stepper button {
+        border: none;
+        background: transparent;
+        color: #2b1a15;
+        font-size: 2rem;
+        line-height: 1;
+        font-weight: 900;
+        width: 34px;
+        height: 34px;
+        cursor: pointer;
+      }
+
+      .mobile-stepper span {
+        min-width: 42px;
+        height: 34px;
+        border: 1px solid rgba(60, 40, 30, 0.45);
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 1.05rem;
+      }
+
+      .detail-view {
+        display: none !important;
+      }
+
+      .cart-drawer {
+        width: 100%;
+        right: -100%;
+      }
+
+      .menu-drawer {
+        width: min(240px, 80vw);
       }
     }
   </style>
 </head>
+
 <body>
   <header class="top-nav">
     <div class="container top-nav-inner">
@@ -843,6 +1169,23 @@
   </section>
 
   <section class="order-app hidden" id="orderApp">
+    <!-- 手機版上方 -->
+    <div class="mobile-header">
+      <div class="mobile-brand">炳昌</div>
+      <div class="mobile-header-actions">
+        <button class="mobile-icon-btn" id="mobileCartBtn" aria-label="購物車">
+          🛒
+          <span class="cart-count" id="mobileCartCount">0</span>
+        </button>
+        <button class="mobile-icon-btn menu" id="mobileMenuBtn" aria-label="選單">☰</button>
+      </div>
+    </div>
+
+    <!-- 手機版分類列 -->
+    <div class="mobile-category-bar">
+      <div class="mobile-category-scroll" id="mobileCategoryList"></div>
+    </div>
+
     <div class="order-shell">
       <aside class="sidebar">
         <div class="sidebar-title">商品分類</div>
@@ -945,12 +1288,24 @@
     </div>
   </aside>
 
+  <!-- 手機右側選單 -->
+  <aside class="menu-drawer" id="menuDrawer">
+    <button class="menu-close" id="closeMenuBtn">×</button>
+    <a href="index.html">回首頁</a>
+    <button type="button" id="menuProductsBtn">商品列表</button>
+    <button type="button" id="menuCartBtn">購物車</button>
+    <button type="button" id="menuLogoutBtn">登出</button>
+  </aside>
+
   <script>
     const categories = [
       "全部",
-      "樹剪",
+      "裝潢",
       "衛浴",
       "動力線/延長線",
+      "束帶",
+      "燈",
+      "樹剪",
       "夾子",
       "鎖",
       "螺絲起子",
@@ -967,19 +1322,21 @@
     ];
 
     const products = [
-      { id: 1, category: "樹剪", name: "高強度樹剪 A", code: "A-01", imageText: "商品照", sizes: ["S","M","L"], colors: ["紅","黑"], desc: "適用園藝修枝與日常工作使用。\n刀片鋒利，握感穩定，適合長時間操作。" },
-      { id: 2, category: "樹剪", name: "專業樹剪 B", code: "B-02", imageText: "商品照", sizes: ["M","L"], colors: ["黑","灰"], desc: "專業等級枝剪，結構耐用。\n適合較高強度的修枝需求。" },
-      { id: 3, category: "鎖", name: "安全掛鎖", code: "L-01", imageText: "商品照", sizes: ["30mm","40mm","50mm"], colors: ["銀","黑"], desc: "耐用鎖芯設計，適用多種門櫃情境。" },
-      { id: 4, category: "螺絲起子", name: "十字起子", code: "D-01", imageText: "商品照", sizes: ["小","中","大"], colors: ["黑黃"], desc: "符合人體工學握把，日常維修方便使用。" },
-      { id: 5, category: "板手", name: "工業板手", code: "W-01", imageText: "商品照", sizes: ["8mm","10mm","12mm"], colors: ["銀"], desc: "高硬度材質製作，適合工業與維修使用。" },
-      { id: 6, category: "水管", name: "耐壓水管", code: "P-01", imageText: "商品照", sizes: ["1尺","3尺","5尺"], colors: ["綠","藍"], desc: "柔韌耐用，適合一般供水與灌溉環境。" },
-      { id: 7, category: "滴管", name: "精密滴管", code: "T-01", imageText: "商品照", sizes: ["細口","標準"], colors: ["透明"], desc: "小量控制方便，適合精密滴注使用。" },
-      { id: 8, category: "夾子", name: "固定夾子", code: "C-01", imageText: "商品照", sizes: ["小","中","大"], colors: ["白","黑"], desc: "管線整理固定更方便，安裝快速。" },
-      { id: 9, category: "捲尺", name: "工程捲尺", code: "M-01", imageText: "商品照", sizes: ["3M","5M","8M"], colors: ["黃黑"], desc: "刻度清楚，回彈順暢，適用多種丈量需求。" },
-      { id: 10, category: "刷子", name: "清潔刷", code: "BR-01", imageText: "商品照", sizes: ["小","中","大"], colors: ["白","藍"], desc: "多用途刷具，可用於一般清潔或施工輔助。" },
-      { id: 11, category: "門鎖", name: "防盜門鎖", code: "DL-01", imageText: "商品照", sizes: ["標準"], colors: ["銀","黑"], desc: "適合住宅與商用門片，安裝便利。" },
-      { id: 12, category: "鏟子", name: "園藝鏟", code: "S-01", imageText: "商品照", sizes: ["小","中"], colors: ["綠","黑"], desc: "適合園藝翻土與日常作業使用。" },
-      { id: 13, category: "動力線/延長線", name: "動力線", code: "SD-01", imageText: "商品照", sizes: ["30米","20米"], colors: ["綠","紅","藍"], desc: "延長電源，長距離更靈活" }
+      { id: 1, category: "樹剪", name: "高強度樹剪 A", code: "A-01", imageText: "商品圖", image: "", sizes: ["S", "M", "L"], colors: ["紅", "黑"], desc: "適用園藝修枝與日常工作使用。\n刀片鋒利，握感穩定，適合長時間操作。" },
+      { id: 2, category: "樹剪", name: "專業樹剪 B", code: "B-02", imageText: "商品圖", image: "", sizes: ["M", "L"], colors: ["黑", "灰"], desc: "專業等級枝剪，結構耐用。\n適合較高強度的修枝需求。" },
+      { id: 3, category: "鎖", name: "安全掛鎖", code: "L-01", imageText: "商品圖", image: "", sizes: ["30mm", "40mm", "50mm"], colors: ["銀", "黑"], desc: "耐用鎖芯設計，適用多種門櫃情境。" },
+      { id: 4, category: "螺絲起子", name: "十字起子", code: "D-01", imageText: "商品圖", image: "", sizes: ["小", "中", "大"], colors: ["黑黃"], desc: "符合人體工學握把，日常維修方便使用。" },
+      { id: 5, category: "板手", name: "工業板手", code: "W-01", imageText: "商品圖", image: "", sizes: ["8mm", "10mm", "12mm"], colors: ["銀"], desc: "高硬度材質製作，適合工業與維修使用。" },
+      { id: 6, category: "水管", name: "耐壓水管", code: "P-01", imageText: "商品圖", image: "", sizes: ["1尺", "3尺", "5尺"], colors: ["綠", "藍"], desc: "柔韌耐用，適合一般供水與灌溉環境。" },
+      { id: 7, category: "束帶", name: "耐用束帶", code: "T-01", imageText: "商品圖", image: "", sizes: ["細", "中", "粗"], colors: ["黑", "白"], desc: "管線整理固定更方便，安裝快速。" },
+      { id: 8, category: "夾子", name: "固定夾子", code: "C-01", imageText: "商品圖", image: "", sizes: ["小", "中", "大"], colors: ["白", "黑"], desc: "日常固定用途，安裝快速。" },
+      { id: 9, category: "捲尺", name: "工程捲尺", code: "M-01", imageText: "商品圖", image: "", sizes: ["3M", "5M", "8M"], colors: ["黃黑"], desc: "刻度清楚，回彈順暢，適用多種丈量需求。" },
+      { id: 10, category: "刷子", name: "清潔刷", code: "BR-01", imageText: "商品圖", image: "", sizes: ["小", "中", "大"], colors: ["白", "藍"], desc: "多用途刷具，可用於一般清潔或施工輔助。" },
+      { id: 11, category: "門鎖", name: "防盜門鎖", code: "DL-01", imageText: "商品圖", image: "", sizes: ["標準"], colors: ["銀", "黑"], desc: "適合住宅與商用門片，安裝便利。" },
+      { id: 12, category: "鏟子", name: "園藝鏟", code: "S-01", imageText: "商品圖", image: "", sizes: ["小", "中"], colors: ["綠", "黑"], desc: "適合園藝翻土與日常作業使用。" },
+      { id: 13, category: "動力線/延長線", name: "動力線", code: "SD-01", imageText: "商品圖", image: "", sizes: ["20米", "30米"], colors: ["綠", "紅", "藍"], desc: "延長電源，長距離更靈活。" },
+      { id: 14, category: "燈", name: "工作燈", code: "LG-01", imageText: "商品圖", image: "", sizes: ["標準"], colors: ["黑"], desc: "施工照明與作業補光使用。" },
+      { id: 15, category: "衛浴", name: "衛浴配件組", code: "BT-01", imageText: "商品圖", image: "", sizes: ["標準"], colors: ["銀"], desc: "適合衛浴空間安裝與更換。" }
     ];
 
     const loginPage = document.getElementById("loginPage");
@@ -987,6 +1344,7 @@
     const loginForm = document.getElementById("loginForm");
 
     const categoryList = document.getElementById("categoryList");
+    const mobileCategoryList = document.getElementById("mobileCategoryList");
     const searchInput = document.getElementById("searchInput");
     const productGrid = document.getElementById("productGrid");
     const sectionTitle = document.getElementById("sectionTitle");
@@ -1009,16 +1367,25 @@
     const buyNowBtn = document.getElementById("buyNowBtn");
 
     const openCartBtn = document.getElementById("openCartBtn");
+    const mobileCartBtn = document.getElementById("mobileCartBtn");
     const closeCartBtn = document.getElementById("closeCartBtn");
     const cartDrawer = document.getElementById("cartDrawer");
     const overlay = document.getElementById("overlay");
     const cartBody = document.getElementById("cartBody");
     const cartCount = document.getElementById("cartCount");
+    const mobileCartCount = document.getElementById("mobileCartCount");
     const cartTotalQty = document.getElementById("cartTotalQty");
     const clearCartBtn = document.getElementById("clearCartBtn");
     const checkoutBtn = document.getElementById("checkoutBtn");
     const goToProductsTop = document.getElementById("goToProductsTop");
     const goToCartTop = document.getElementById("goToCartTop");
+
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const menuDrawer = document.getElementById("menuDrawer");
+    const closeMenuBtn = document.getElementById("closeMenuBtn");
+    const menuProductsBtn = document.getElementById("menuProductsBtn");
+    const menuCartBtn = document.getElementById("menuCartBtn");
+    const menuLogoutBtn = document.getElementById("menuLogoutBtn");
 
     let currentCategory = "全部";
     let currentSearch = "";
@@ -1028,8 +1395,21 @@
     let selectedQty = 1;
     let cart = [];
 
+    function isMobileView() {
+      return window.innerWidth <= 560;
+    }
+
+    function getProductThumbHTML(product) {
+      if (product.image) {
+        return `<img src="${product.image}" alt="${product.name}">`;
+      }
+      return product.imageText || "商品圖";
+    }
+
     function renderCategories() {
       categoryList.innerHTML = "";
+      mobileCategoryList.innerHTML = "";
+
       categories.forEach(category => {
         const li = document.createElement("li");
         const btn = document.createElement("button");
@@ -1044,6 +1424,18 @@
         });
         li.appendChild(btn);
         categoryList.appendChild(li);
+
+        const mobileBtn = document.createElement("button");
+        mobileBtn.className = "mobile-cat-btn";
+        if (category === currentCategory) mobileBtn.classList.add("active");
+        mobileBtn.textContent = category;
+        mobileBtn.addEventListener("click", () => {
+          currentCategory = category;
+          renderCategories();
+          renderProducts();
+          showProductList();
+        });
+        mobileCategoryList.appendChild(mobileBtn);
       });
     }
 
@@ -1057,6 +1449,50 @@
           product.category.toLowerCase().includes(keyword);
         return categoryMatch && searchMatch;
       });
+    }
+
+    function createMobileStepper(product) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "mobile-stepper";
+
+      const minusBtn = document.createElement("button");
+      minusBtn.type = "button";
+      minusBtn.textContent = "−";
+
+      const qtySpan = document.createElement("span");
+      qtySpan.textContent = "0";
+
+      const plusBtn = document.createElement("button");
+      plusBtn.type = "button";
+      plusBtn.textContent = "+";
+
+      minusBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        const existed = cart.find(item => item.id === product.id);
+        if (!existed) return;
+
+        existed.qty--;
+        if (existed.qty <= 0) {
+          cart = cart.filter(item => item.id !== product.id);
+        }
+
+        renderCart();
+        renderProducts();
+      });
+
+      plusBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        addToCart(product, product.sizes[0] || "", product.colors[0] || "", 1);
+        renderProducts();
+      });
+
+      const existed = cart.find(item => item.id === product.id);
+      qtySpan.textContent = existed ? existed.qty : 0;
+
+      wrapper.append(minusBtn, qtySpan, plusBtn);
+      return wrapper;
     }
 
     function renderProducts() {
@@ -1074,17 +1510,36 @@
       filtered.forEach(product => {
         const card = document.createElement("div");
         card.className = "product-card";
-        card.innerHTML = `
-          <div class="product-thumb">${product.imageText}</div>
+
+        if (isMobileView()) {
+          card.innerHTML = `
+        <div class="product-thumb">${getProductThumbHTML(product)}</div>
+        <div class="mobile-product-info">
           <div class="product-name">${product.name}</div>
-          <div class="product-meta">分類：${product.category}</div>
-          <div class="product-meta">編號：${product.code}</div>
-        `;
-        card.addEventListener("click", () => openProductDetail(product.id));
+          <div class="mobile-code">${product.code}</div>
+        </div>
+      `;
+
+          card.appendChild(createMobileStepper(product));
+
+
+          card.addEventListener("click", () => {
+            openProductDetail(product.id);
+          });
+        } else {
+          card.innerHTML = `
+        <div class="product-thumb">${getProductThumbHTML(product)}</div>
+        <div class="product-name">${product.name}</div>
+        <div class="product-meta">分類：${product.category}</div>
+        <div class="product-meta">編號：${product.code}</div>
+      `;
+
+          card.addEventListener("click", () => openProductDetail(product.id));
+        }
+
         productGrid.appendChild(card);
       });
     }
-
     function renderOptionButtons(container, options, activeValue, onClick) {
       container.innerHTML = "";
       options.forEach(option => {
@@ -1107,7 +1562,7 @@
       selectedColor = product.colors[0] || "";
       selectedQty = 1;
 
-      detailImage.textContent = product.imageText;
+      detailImage.innerHTML = getProductThumbHTML(product);
       detailName.textContent = product.name;
       detailCode.textContent = `商品編號：${product.code}`;
       detailDesc.textContent = `商品分類：${product.category}\n\n${product.desc}`;
@@ -1131,7 +1586,6 @@
       pageTitle.textContent = "商品詳細";
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-
     function showProductList() {
       detailView.style.display = "none";
       productSection.style.display = "block";
@@ -1139,10 +1593,13 @@
     }
 
     function addToCart(product, size, color, qty) {
+      const normalizedSize = size || "";
+      const normalizedColor = color || "";
+
       const existed = cart.find(item =>
         item.id === product.id &&
-        item.size === size &&
-        item.color === color
+        item.size === normalizedSize &&
+        item.color === normalizedColor
       );
 
       if (existed) {
@@ -1153,8 +1610,9 @@
           name: product.name,
           code: product.code,
           imageText: product.imageText,
-          size,
-          color,
+          image: product.image || "",
+          size: normalizedSize,
+          color: normalizedColor,
           qty
         });
       }
@@ -1172,11 +1630,11 @@
           const div = document.createElement("div");
           div.className = "cart-item";
           div.innerHTML = `
-            <div class="cart-thumb">${item.imageText}</div>
+            <div class="cart-thumb">${item.image ? `<img src="${item.image}" alt="${item.name}">` : item.imageText}</div>
             <div>
               <h4>${item.name}</h4>
               <div class="cart-meta">編號：${item.code}</div>
-              <div class="cart-meta">尺寸：${item.size} / 顏色：${item.color}</div>
+              <div class="cart-meta">尺寸：${item.size || "-"} / 顏色：${item.color || "-"}</div>
               <div class="cart-qty">
                 <button type="button" data-action="minus" data-index="${index}">-</button>
                 <span>${item.qty}</span>
@@ -1191,16 +1649,35 @@
 
       const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
       cartCount.textContent = totalQty;
+      mobileCartCount.textContent = totalQty;
       cartTotalQty.textContent = totalQty;
     }
 
     function openCart() {
       cartDrawer.classList.add("open");
       overlay.classList.add("show");
+      menuDrawer.classList.remove("open");
     }
 
     function closeCart() {
       cartDrawer.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+
+    function openMenu() {
+      menuDrawer.classList.add("open");
+      overlay.classList.add("show");
+      cartDrawer.classList.remove("open");
+    }
+
+    function closeMenu() {
+      menuDrawer.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+
+    function closeAllPanels() {
+      cartDrawer.classList.remove("open");
+      menuDrawer.classList.remove("open");
       overlay.classList.remove("show");
     }
 
@@ -1246,8 +1723,13 @@
     });
 
     openCartBtn.addEventListener("click", openCart);
+    mobileCartBtn.addEventListener("click", openCart);
     closeCartBtn.addEventListener("click", closeCart);
-    overlay.addEventListener("click", closeCart);
+
+    mobileMenuBtn.addEventListener("click", openMenu);
+    closeMenuBtn.addEventListener("click", closeMenu);
+
+    overlay.addEventListener("click", closeAllPanels);
 
     cartBody.addEventListener("click", (e) => {
       const target = e.target;
@@ -1257,7 +1739,11 @@
       if (Number.isNaN(index)) return;
 
       if (action === "minus") {
-        if (cart[index].qty > 1) cart[index].qty--;
+        if (cart[index].qty > 1) {
+          cart[index].qty--;
+        } else {
+          cart.splice(index, 1);
+        }
       } else if (action === "plus") {
         cart[index].qty++;
       } else if (action === "remove") {
@@ -1265,11 +1751,13 @@
       }
 
       renderCart();
+      renderProducts();
     });
 
     clearCartBtn.addEventListener("click", () => {
       cart = [];
       renderCart();
+      renderProducts();
     });
 
     checkoutBtn.addEventListener("click", () => {
@@ -1279,12 +1767,13 @@
       }
 
       const summary = cart.map(item =>
-        `${item.name} / ${item.size} / ${item.color} / 數量 ${item.qty}`
+        `${item.name} / ${item.size || "-"} / ${item.color || "-"} / 數量 ${item.qty}`
       ).join("\n");
 
       alert(`訂單已送出（前端示意）\n\n${summary}`);
       cart = [];
       renderCart();
+      renderProducts();
       closeCart();
     });
 
@@ -1298,6 +1787,29 @@
       e.preventDefault();
       openCart();
     });
+
+    menuProductsBtn.addEventListener("click", () => {
+      closeMenu();
+      showProductList();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    menuCartBtn.addEventListener("click", () => {
+      closeMenu();
+      openCart();
+    });
+
+    menuLogoutBtn.addEventListener("click", () => {
+      closeAllPanels();
+      orderApp.classList.add("hidden");
+      loginPage.classList.remove("hidden");
+    });
+
+    window.addEventListener("resize", () => {
+      renderCategories();
+      renderProducts();
+    });
   </script>
 </body>
+
 </html>
