@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -6,10 +8,10 @@ const fs = require("fs");
 const sqlite3 = require("sqlite3").verbose();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-const ADMIN_ACCOUNT = "c417";
-const ADMIN_PASSWORD = "Ab80070225";
+const ADMIN_ACCOUNT = process.env.ADMIN_ACCOUNT || "c417";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Ab80070225";
 
 const rootDir = __dirname;
 const publicDir = path.join(rootDir, "public");
@@ -23,10 +25,23 @@ if (!fs.existsSync(uploadDir)) {
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use((req, res, next) => {
+  console.log("[REQUEST]", req.method, req.url);
+  next();
+});
+
 app.use("/uploads", express.static(uploadDir));
 app.use(express.static(publicDir));
 
-const db = new sqlite3.Database(dbPath);
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error("資料庫連線失敗:", err.message);
+  } else {
+    console.log("SQLite 資料庫連線成功");
+    db.run("PRAGMA foreign_keys = ON");
+  }
+});
 
 function run(sql, params = []) {
   return new Promise((resolve, reject) => {
@@ -68,6 +83,16 @@ function isAdmin(account, password) {
   return account === ADMIN_ACCOUNT && password === ADMIN_PASSWORD;
 }
 
+function deleteFileIfExists(filePath) {
+  try {
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+  } catch (error) {
+    console.error("刪除檔案失敗:", filePath, error.message);
+  }
+}
+
 async function initDb() {
   await run(`
     CREATE TABLE IF NOT EXISTS products (
@@ -98,6 +123,7 @@ async function initDb() {
     CREATE TABLE IF NOT EXISTS orders (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT NOT NULL,
+      status TEXT DEFAULT '待處理',
       createdAt TEXT DEFAULT CURRENT_TIMESTAMP
     )
   `);
@@ -179,6 +205,7 @@ async function getProducts() {
 async function getProductById(id) {
   const product = await get(`SELECT * FROM products WHERE id = ?`, [id]);
   if (!product) return null;
+
   product.images = await getProductImages(product.id);
   product.sizes = safeJsonParse(product.sizes, ["標準"]);
   product.colors = safeJsonParse(product.colors, ["標準"]);
@@ -190,16 +217,32 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename(req, file, cb) {
-    const ext = path.extname(file.originalname || "");
+    const ext = path.extname(file.originalname || "").toLowerCase();
     const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
     cb(null, filename);
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  fileFilter(req, file, cb) {
+    const allowed = [".jpg", ".jpeg", ".png", ".webp"];
+    const ext = path.extname(file.originalname || "").toLowerCase();
+
+    if (!allowed.includes(ext)) {
+      return cb(new Error("只允許上傳 jpg、jpeg、png、webp 圖片"));
+    }
+
+    cb(null, true);
+  },
+  limits: {
+    fileSize: 5 * 1024 * 1024
+  }
+});
 
 app.post("/api/admin/login", (req, res) => {
   const { account, password } = req.body;
+
   if (!isAdmin(account, password)) {
     return res.status(401).json({
       success: false,
@@ -218,19 +261,55 @@ app.get("/api/products", async (req, res) => {
     const products = await getProducts();
     res.json({ success: true, products });
   } catch (error) {
-    res.status(500).json({ success: false, message: "讀取商品失敗", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "讀取商品失敗",
+      error: error.message
+    });
   }
 });
 
 app.get("/api/products/:id", async (req, res) => {
   try {
     const product = await getProductById(req.params.id);
+
     if (!product) {
-      return res.status(404).json({ success: false, message: "找不到商品" });
+      return res.status(404).json({
+        success: false,
+        message: "找不到商品"
+      });
     }
+
     res.json({ success: true, product });
   } catch (error) {
-    res.status(500).json({ success: false, message: "讀取商品失敗", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "讀取商品失敗",
+      error: error.message
+    });
+  }
+});
+
+app.get("/api/products/category/:category", async (req, res) => {
+  try {
+    const rows = await all(
+      `SELECT * FROM products WHERE category = ? ORDER BY id DESC`,
+      [req.params.category]
+    );
+
+    for (const product of rows) {
+      product.images = await getProductImages(product.id);
+      product.sizes = safeJsonParse(product.sizes, ["標準"]);
+      product.colors = safeJsonParse(product.colors, ["標準"]);
+    }
+
+    res.json({ success: true, products: rows });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "讀取分類商品失敗",
+      error: error.message
+    });
   }
 });
 
@@ -249,16 +328,25 @@ app.post("/api/products", upload.array("images", 10), async (req, res) => {
     } = req.body;
 
     if (!isAdmin(adminAccount, adminPassword)) {
-      return res.status(401).json({ success: false, message: "管理員驗證失敗" });
+      return res.status(401).json({
+        success: false,
+        message: "管理員驗證失敗"
+      });
     }
 
     if (!category || !name || !code) {
-      return res.status(400).json({ success: false, message: "分類、名稱、編號必填" });
+      return res.status(400).json({
+        success: false,
+        message: "分類、名稱、編號必填"
+      });
     }
 
     const exists = await get(`SELECT id FROM products WHERE code = ?`, [code]);
     if (exists) {
-      return res.status(400).json({ success: false, message: "商品編號已存在" });
+      return res.status(400).json({
+        success: false,
+        message: "商品編號已存在"
+      });
     }
 
     const result = await run(
@@ -281,15 +369,25 @@ app.post("/api/products", upload.array("images", 10), async (req, res) => {
     }
 
     const product = await getProductById(productId);
-    res.json({ success: true, message: "商品新增成功", product });
+
+    res.json({
+      success: true,
+      message: "商品新增成功",
+      product
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: "新增商品失敗", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "新增商品失敗",
+      error: error.message
+    });
   }
 });
 
 app.put("/api/products/:id", upload.array("images", 10), async (req, res) => {
   try {
     const productId = Number(req.params.id);
+
     const {
       adminAccount,
       adminPassword,
@@ -304,17 +402,36 @@ app.put("/api/products/:id", upload.array("images", 10), async (req, res) => {
     } = req.body;
 
     if (!isAdmin(adminAccount, adminPassword)) {
-      return res.status(401).json({ success: false, message: "管理員驗證失敗" });
+      return res.status(401).json({
+        success: false,
+        message: "管理員驗證失敗"
+      });
+    }
+
+    if (!category || !name || !code) {
+      return res.status(400).json({
+        success: false,
+        message: "分類、名稱、編號必填"
+      });
     }
 
     const oldProduct = await getProductById(productId);
     if (!oldProduct) {
-      return res.status(404).json({ success: false, message: "商品不存在" });
+      return res.status(404).json({
+        success: false,
+        message: "商品不存在"
+      });
     }
 
-    const exists = await get(`SELECT id FROM products WHERE code = ? AND id != ?`, [code, productId]);
+    const exists = await get(
+      `SELECT id FROM products WHERE code = ? AND id != ?`,
+      [code, productId]
+    );
     if (exists) {
-      return res.status(400).json({ success: false, message: "商品編號已被使用" });
+      return res.status(400).json({
+        success: false,
+        message: "商品編號已被使用"
+      });
     }
 
     await run(
@@ -327,16 +444,17 @@ app.put("/api/products/:id", upload.array("images", 10), async (req, res) => {
     );
 
     const keepImageList = safeJsonParse(keepImages, []);
-    const oldImages = await all(`SELECT * FROM product_images WHERE product_id = ?`, [productId]);
+    const oldImages = await all(
+      `SELECT * FROM product_images WHERE product_id = ? ORDER BY id ASC`,
+      [productId]
+    );
 
     for (const row of oldImages) {
       if (!keepImageList.includes(row.image_url)) {
         await run(`DELETE FROM product_images WHERE id = ?`, [row.id]);
 
         const filePath = path.join(rootDir, row.image_url.replace(/^\//, ""));
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
+        deleteFileIfExists(filePath);
       }
     }
 
@@ -351,52 +469,79 @@ app.put("/api/products/:id", upload.array("images", 10), async (req, res) => {
     }
 
     const product = await getProductById(productId);
-    res.json({ success: true, message: "商品修改成功", product });
+
+    res.json({
+      success: true,
+      message: "商品修改成功",
+      product
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: "修改商品失敗", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "修改商品失敗",
+      error: error.message
+    });
   }
 });
 
-app.delete("/api/products/:id", async (req, res) => {
+app.post("/api/products/:id/delete", async (req, res) => {
   try {
     const { adminAccount, adminPassword } = req.body;
 
     if (!isAdmin(adminAccount, adminPassword)) {
-      return res.status(401).json({ success: false, message: "管理員驗證失敗" });
+      return res.status(401).json({
+        success: false,
+        message: "管理員驗證失敗"
+      });
     }
 
     const productId = Number(req.params.id);
     const product = await getProductById(productId);
 
     if (!product) {
-      return res.status(404).json({ success: false, message: "商品不存在" });
+      return res.status(404).json({
+        success: false,
+        message: "商品不存在"
+      });
     }
 
     for (const imageUrl of product.images) {
       const filePath = path.join(rootDir, imageUrl.replace(/^\//, ""));
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+      deleteFileIfExists(filePath);
     }
 
     await run(`DELETE FROM product_images WHERE product_id = ?`, [productId]);
     await run(`DELETE FROM products WHERE id = ?`, [productId]);
 
-    res.json({ success: true, message: "商品刪除成功" });
+    res.json({
+      success: true,
+      message: "商品刪除成功"
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: "刪除商品失敗", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "刪除商品失敗",
+      error: error.message
+    });
   }
 });
 
 app.post("/api/orders", async (req, res) => {
+  console.log(">>> HIT /api/orders");
   try {
     const { username, items } = req.body;
 
     if (!username || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ success: false, message: "訂單資料不完整" });
+      return res.status(400).json({
+        success: false,
+        message: "訂單資料不完整"
+      });
     }
 
-    const result = await run(`INSERT INTO orders (username) VALUES (?)`, [username]);
+    const result = await run(
+      `INSERT INTO orders (username, status) VALUES (?, '待處理')`,
+      [username]
+    );
     const orderId = result.lastID;
 
     for (const item of items) {
@@ -418,15 +563,32 @@ app.post("/api/orders", async (req, res) => {
       );
     }
 
-    res.json({ success: true, message: "訂單送出成功", orderId });
+    res.json({
+      success: true,
+      message: "訂單送出成功",
+      orderId
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: "訂單送出失敗", error: error.message });
+    console.error("訂單送出失敗:", error);
+    res.status(500).json({
+      success: false,
+      message: "訂單送出失敗",
+      error: error.message
+    });
   }
 });
 
 app.get("/api/orders/:username", async (req, res) => {
   try {
     const username = req.params.username;
+
+    if (!username) {
+      return res.status(400).json({
+        success: false,
+        message: "缺少使用者名稱"
+      });
+    }
+
     const orders = await all(
       `SELECT * FROM orders WHERE username = ? ORDER BY id DESC`,
       [username]
@@ -439,14 +601,114 @@ app.get("/api/orders/:username", async (req, res) => {
       );
     }
 
-    res.json({ success: true, orders });
+    res.json({
+      success: true,
+      orders
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: "讀取歷史訂單失敗", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "讀取歷史訂單失敗",
+      error: error.message
+    });
   }
 });
 
-app.get("*", (req, res) => {
+app.post("/api/admin/orders", async (req, res) => {
+  try {
+    const { adminAccount, adminPassword } = req.body;
+
+    if (!isAdmin(adminAccount, adminPassword)) {
+      return res.status(401).json({
+        success: false,
+        message: "管理員驗證失敗"
+      });
+    }
+
+    const orders = await all(`SELECT * FROM orders ORDER BY id DESC`);
+
+    for (const order of orders) {
+      order.items = await all(
+        `SELECT * FROM order_items WHERE order_id = ? ORDER BY id ASC`,
+        [order.id]
+      );
+    }
+
+    res.json({
+      success: true,
+      orders
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "讀取全部訂單失敗",
+      error: error.message
+    });
+  }
+});
+
+app.post("/api/admin/orders/:id/status", async (req, res) => {
+  try {
+    const { adminAccount, adminPassword, status } = req.body;
+    const orderId = Number(req.params.id);
+
+    if (!isAdmin(adminAccount, adminPassword)) {
+      return res.status(401).json({
+        success: false,
+        message: "管理員驗證失敗"
+      });
+    }
+
+    if (!status) {
+      return res.status(400).json({
+        success: false,
+        message: "狀態不可為空"
+      });
+    }
+
+    const order = await get(`SELECT * FROM orders WHERE id = ?`, [orderId]);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "訂單不存在"
+      });
+    }
+
+    await run(`UPDATE orders SET status = ? WHERE id = ?`, [status, orderId]);
+
+    res.json({
+      success: true,
+      message: "訂單狀態更新成功"
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "更新訂單狀態失敗",
+      error: error.message
+    });
+  }
+});
+
+app.get("/", (req, res) => {
   res.sendFile(path.join(publicDir, "order.html"));
+});
+
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({
+      success: false,
+      message: `檔案上傳失敗：${err.message}`
+    });
+  }
+
+  if (err) {
+    return res.status(400).json({
+      success: false,
+      message: err.message || "伺服器發生錯誤"
+    });
+  }
+
+  next();
 });
 
 initDb()

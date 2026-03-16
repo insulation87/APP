@@ -22,8 +22,6 @@
       --nav-h: 88px;
       --sidebar-w: 220px;
       --max-width: 1440px;
-      --mobile-header-h: 110px;
-      --mobile-category-h: 74px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,6 +33,7 @@
       line-height: 1.6;
       overflow-x: hidden;
     }
+
     a { text-decoration: none; color: inherit; }
     button, input, textarea, select { font: inherit; }
     .hidden { display: none !important; }
@@ -49,6 +48,7 @@
       border-bottom: 1px solid var(--line);
       z-index: 1000;
     }
+
     .top-nav-inner {
       height: 100%;
       display: flex;
@@ -56,12 +56,14 @@
       justify-content: space-between;
       gap: 24px;
     }
+
     .brand {
       font-size: clamp(1.6rem, 3vw, 2.6rem);
       font-weight: 900;
       letter-spacing: 2px;
       color: var(--accent);
     }
+
     .top-links {
       display: flex;
       align-items: center;
@@ -69,7 +71,8 @@
       font-weight: 800;
       flex-wrap: wrap;
     }
-    .top-links a, .top-links button {
+
+    .top-links button {
       border: none;
       background: transparent;
       cursor: pointer;
@@ -87,6 +90,7 @@
         radial-gradient(circle at 82% 22%, rgba(28, 54, 183, 0.08), transparent 20%),
         linear-gradient(180deg, #ffffff 0%, #eef2fb 100%);
     }
+
     .login-card {
       width: min(460px, 100%);
       background: rgba(255,255,255,.92);
@@ -95,27 +99,33 @@
       padding: 42px 34px;
       box-shadow: var(--shadow);
     }
+
     .login-card h1 {
       font-size: 2.2rem;
       text-align: center;
       margin-bottom: 10px;
     }
+
     .login-card p {
       text-align: center;
       color: var(--text-light);
       margin-bottom: 28px;
     }
+
     .login-form {
       display: grid;
       gap: 16px;
     }
+
     .form-group {
       display: grid;
       gap: 8px;
     }
+
     .form-group label {
       font-weight: 800;
     }
+
     .form-group input,
     .form-group textarea {
       width: 100%;
@@ -126,10 +136,12 @@
       background: #fff;
       outline: none;
     }
+
     .form-group textarea {
       min-height: 120px;
       resize: vertical;
     }
+
     .login-actions, .detail-actions, .admin-actions-inline {
       display: flex;
       gap: 12px;
@@ -148,23 +160,29 @@
       font-weight: 900;
       transition: .25s ease;
     }
+
     .btn:hover { transform: translateY(-2px); }
+
     .btn-primary {
       background: var(--primary);
       color: #fff;
       box-shadow: 0 10px 30px rgba(28,54,183,.22);
     }
+
     .btn-primary:hover { background: var(--primary-dark); }
+
     .btn-secondary {
       background: #fff;
       color: var(--text);
       border-color: rgba(0,0,0,.1);
     }
+
     .btn-danger {
       background: #fff1f1;
       color: #b90000;
       border-color: rgba(185,0,0,.12);
     }
+
     .btn-warning {
       background: #fff6e7;
       color: #8a5300;
@@ -175,11 +193,13 @@
       padding-top: var(--nav-h);
       min-height: 100vh;
     }
+
     .order-shell {
       display: grid;
       grid-template-columns: var(--sidebar-w) 1fr;
       min-height: calc(100vh - var(--nav-h));
     }
+
     .sidebar {
       background: linear-gradient(180deg, #5f6676 0%, #4d5566 100%);
       color: #fff;
@@ -189,17 +209,20 @@
       height: calc(100vh - var(--nav-h));
       overflow: auto;
     }
+
     .sidebar-title {
       font-size: 1.8rem;
       font-weight: 900;
       color: var(--accent);
       margin-bottom: 20px;
     }
+
     .category-list {
       list-style: none;
       display: grid;
       gap: 8px;
     }
+
     .category-btn {
       width: 100%;
       border: none;
@@ -211,6 +234,7 @@
       cursor: pointer;
       font-weight: 700;
     }
+
     .category-btn.active,
     .category-btn:hover {
       background: rgba(255,255,255,.16);
@@ -231,16 +255,20 @@
       align-items: center;
       gap: 18px;
     }
+
     .page-title {
       font-size: 1.8rem;
       font-weight: 900;
     }
+
     .topbar-actions {
       display: flex;
       align-items: center;
       gap: 14px;
       margin-left: auto;
+      flex-wrap: wrap;
     }
+
     .search-wrap {
       width: min(340px, 42vw);
       height: 44px;
@@ -251,6 +279,7 @@
       padding: 0 14px;
       color: #fff;
     }
+
     .search-wrap input {
       width: 100%;
       background: transparent;
@@ -258,6 +287,7 @@
       outline: none;
       color: #fff;
     }
+
     .search-wrap input::placeholder { color: rgba(255,255,255,.82); }
 
     .cart-btn {
@@ -271,6 +301,7 @@
       box-shadow: var(--shadow-soft);
       font-size: 1.35rem;
     }
+
     .cart-count {
       position: absolute;
       top: -4px;
@@ -291,13 +322,16 @@
     .content, .admin-content {
       padding: 26px 24px 34px;
     }
+
     .section-head {
       margin-bottom: 22px;
     }
+
     .section-head h2 {
       font-size: 2rem;
       margin-bottom: 6px;
     }
+
     .section-head p {
       color: var(--text-light);
     }
@@ -307,6 +341,7 @@
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 18px;
     }
+
     .product-card {
       background: #fff;
       border-radius: 20px;
@@ -316,11 +351,13 @@
       transition: .25s ease;
       border: 1px solid transparent;
     }
+
     .product-card:hover {
       transform: translateY(-6px);
       border-color: rgba(28,54,183,.16);
       box-shadow: var(--shadow);
     }
+
     .product-thumb {
       aspect-ratio: 1 / 1;
       border-radius: 16px;
@@ -335,6 +372,7 @@
       margin-bottom: 12px;
       overflow: hidden;
     }
+
     .product-thumb img,
     .detail-image img,
     .detail-thumb img,
@@ -345,11 +383,13 @@
       height: 100%;
       object-fit: cover;
     }
+
     .product-name {
       font-weight: 900;
       margin-bottom: 6px;
       line-height: 1.4;
     }
+
     .product-meta {
       font-size: .92rem;
       color: var(--text-light);
@@ -358,6 +398,7 @@
     .detail-view, .history-view {
       display: none;
     }
+
     .detail-layout {
       background: #fff;
       border-radius: 28px;
@@ -367,10 +408,12 @@
       grid-template-columns: 340px 1fr;
       gap: 30px;
     }
+
     .detail-gallery {
       display: grid;
       gap: 14px;
     }
+
     .detail-image {
       width: 100%;
       aspect-ratio: 1 / 1;
@@ -385,11 +428,13 @@
       color: var(--primary);
       overflow: hidden;
     }
+
     .detail-thumbs {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
     }
+
     .detail-thumb {
       aspect-ratio: 1 / 1;
       border-radius: 12px;
@@ -398,33 +443,40 @@
       background: #f3f6ff;
       cursor: pointer;
     }
+
     .detail-thumb.active {
       border-color: var(--primary);
     }
+
     .detail-info h2 {
       font-size: 2rem;
       margin-bottom: 12px;
     }
+
     .detail-code {
       color: var(--text-light);
       margin-bottom: 22px;
       font-weight: 700;
     }
+
     .spec-groups {
       display: grid;
       gap: 14px;
       margin-bottom: 20px;
     }
+
     .spec-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       align-items: center;
     }
+
     .spec-label {
       min-width: 62px;
       font-weight: 900;
     }
+
     .spec-btn {
       border: 1px solid rgba(0,0,0,.12);
       background: #fff;
@@ -434,11 +486,13 @@
       font-size: .95rem;
       font-weight: 700;
     }
+
     .spec-btn.active {
       background: var(--primary);
       color: #fff;
       border-color: var(--primary);
     }
+
     .qty-row {
       display: flex;
       align-items: center;
@@ -446,6 +500,7 @@
       margin-bottom: 22px;
       flex-wrap: wrap;
     }
+
     .qty-box {
       display: inline-flex;
       align-items: center;
@@ -454,6 +509,7 @@
       border-radius: 12px;
       overflow: hidden;
     }
+
     .qty-box button {
       width: 38px;
       height: 38px;
@@ -463,17 +519,20 @@
       font-weight: 900;
       color: var(--primary);
     }
+
     .qty-box span {
       width: 50px;
       text-align: center;
       font-weight: 900;
     }
+
     .detail-buy-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       margin-bottom: 22px;
     }
+
     .detail-desc {
       padding-top: 18px;
       border-top: 1px solid var(--line);
@@ -487,16 +546,19 @@
       box-shadow: var(--shadow);
       padding: 28px;
     }
+
     .history-list {
       display: grid;
       gap: 18px;
     }
+
     .history-card {
       border: 1px solid rgba(0,0,0,.08);
       border-radius: 20px;
       background: #f9fbff;
       padding: 18px;
     }
+
     .history-order-top {
       display: flex;
       justify-content: space-between;
@@ -504,11 +566,13 @@
       flex-wrap: wrap;
       margin-bottom: 12px;
     }
+
     .history-items {
       display: grid;
       gap: 10px;
       margin-bottom: 14px;
     }
+
     .history-item {
       background: #fff;
       border-radius: 14px;
@@ -519,6 +583,7 @@
       gap: 12px;
       align-items: center;
     }
+
     .history-thumb {
       width: 70px;
       height: 70px;
@@ -537,33 +602,40 @@
       display: grid;
       gap: 24px;
     }
+
     .admin-panel, .admin-list-panel {
       background: #fff;
       border-radius: 28px;
       box-shadow: var(--shadow);
       padding: 28px;
     }
+
     .admin-panel h2, .admin-list-panel h2 {
       font-size: 2rem;
       margin-bottom: 8px;
     }
+
     .admin-panel p, .admin-list-panel p {
       color: var(--text-light);
       margin-bottom: 18px;
     }
+
     .admin-form {
       display: grid;
       gap: 14px;
     }
+
     .admin-form-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
+
     .admin-products {
       display: grid;
       gap: 14px;
     }
+
     .admin-product-row {
       display: grid;
       grid-template-columns: 100px 1fr auto;
@@ -574,6 +646,7 @@
       border-radius: 18px;
       background: #f9fbff;
     }
+
     .admin-product-thumb {
       width: 100px;
       height: 100px;
@@ -586,20 +659,24 @@
       font-weight: 900;
       overflow: hidden;
     }
+
     .admin-product-title {
       font-size: 1.08rem;
       font-weight: 900;
       margin-bottom: 4px;
     }
+
     .admin-product-meta {
       color: var(--text-light);
       font-size: .92rem;
     }
+
     .edit-image-list {
       display: grid;
       gap: 8px;
       margin-top: 8px;
     }
+
     .edit-image-item {
       display: grid;
       grid-template-columns: 64px 1fr auto;
@@ -610,6 +687,7 @@
       border-radius: 12px;
       background: #f8faff;
     }
+
     .edit-image-thumb {
       width: 64px;
       height: 64px;
@@ -627,10 +705,12 @@
       transition: .28s ease;
       z-index: 1100;
     }
+
     .overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
+
     .cart-drawer {
       position: fixed;
       top: 0;
@@ -644,7 +724,9 @@
       display: flex;
       flex-direction: column;
     }
+
     .cart-drawer.open { right: 0; }
+
     .cart-header {
       padding: 22px 20px;
       border-bottom: 1px solid var(--line);
@@ -652,16 +734,19 @@
       align-items: center;
       justify-content: space-between;
     }
+
     .cart-header h3 {
       font-size: 1.7rem;
       font-weight: 900;
     }
+
     .cart-close {
       border: none;
       background: transparent;
       font-size: 1.9rem;
       cursor: pointer;
     }
+
     .cart-body {
       flex: 1;
       overflow: auto;
@@ -669,6 +754,7 @@
       display: grid;
       gap: 14px;
     }
+
     .cart-item {
       background: #f9fbff;
       border: 1px solid rgba(28,54,183,.06);
@@ -679,6 +765,7 @@
       gap: 12px;
       align-items: center;
     }
+
     .cart-thumb {
       width: 76px;
       height: 76px;
@@ -691,6 +778,7 @@
       font-weight: 900;
       overflow: hidden;
     }
+
     .cart-qty {
       display: inline-flex;
       align-items: center;
@@ -700,6 +788,7 @@
       margin-top: 8px;
       background: #fff;
     }
+
     .cart-qty button {
       width: 28px;
       height: 28px;
@@ -709,11 +798,13 @@
       cursor: pointer;
       font-weight: 900;
     }
+
     .cart-qty span {
       width: 34px;
       text-align: center;
       font-weight: 900;
     }
+
     .remove-btn {
       border: none;
       background: transparent;
@@ -721,6 +812,7 @@
       font-weight: 900;
       cursor: pointer;
     }
+
     .cart-footer {
       border-top: 1px solid var(--line);
       padding: 18px 20px 22px;
@@ -728,16 +820,19 @@
       gap: 14px;
       background: #fff;
     }
+
     .cart-total {
       display: flex;
       justify-content: space-between;
       font-size: 1.08rem;
       font-weight: 900;
     }
+
     .cart-actions {
       display: flex;
       gap: 12px;
     }
+
     .cart-actions .btn { flex: 1; }
 
     .empty-box {
@@ -807,6 +902,7 @@
         <button type="button" id="goToHistoryTop">曾經購買過</button>
         <button type="button" id="goToCartTop">購物車</button>
         <button type="button" id="goToAdminTop" class="hidden">後台管理</button>
+        <button type="button" id="logoutTopBtn" class="hidden">登出</button>
       </nav>
     </div>
   </header>
@@ -1074,6 +1170,7 @@
     const goToHistoryTop = document.getElementById("goToHistoryTop");
     const goToCartTop = document.getElementById("goToCartTop");
     const goToAdminTop = document.getElementById("goToAdminTop");
+    const logoutTopBtn = document.getElementById("logoutTopBtn");
 
     const adminProductForm = document.getElementById("adminProductForm");
     const adminProductsList = document.getElementById("adminProductsList");
@@ -1104,7 +1201,7 @@
     let currentDetailImageIndex = 0;
     let cart = [];
     let currentUser = "";
-    let isAdmin = false;
+    let isAdminUser = false;
     let adminAccount = "";
     let adminPassword = "";
     let editingProductId = null;
@@ -1148,35 +1245,83 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ account, password })
       });
+
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        throw new Error("管理員登入回傳格式錯誤");
+      }
+
       return await res.json();
     }
 
     async function fetchProducts() {
-      const res = await fetch("/api/products");
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message || "讀取商品失敗");
-      products = data.products || [];
-      refreshAllProductRelatedUI();
+      try {
+        const res = await fetch("/api/products");
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          throw new Error("伺服器未回傳 JSON");
+        }
+
+        const data = await res.json();
+        if (!data.success) {
+          throw new Error(data.message || "讀取商品失敗");
+        }
+
+        products = data.products || [];
+        refreshAllProductRelatedUI();
+      } catch (error) {
+        console.error("讀取商品失敗:", error);
+        alert("讀取商品失敗，請確認 server.js 是否已正常啟動");
+      }
     }
 
     async function fetchOrderHistory() {
       if (!currentUser) return [];
-      const res = await fetch(`/api/orders/${encodeURIComponent(currentUser)}`);
-      const data = await res.json();
-      if (!data.success) return [];
-      return data.orders || [];
+
+      try {
+        const res = await fetch(`/api/orders/${encodeURIComponent(currentUser)}`);
+
+        if (!res.ok) {
+          console.error("讀取歷史訂單失敗，HTTP 狀態碼：", res.status);
+          return [];
+        }
+
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          console.error("歷史訂單回傳內容不是 JSON");
+          return [];
+        }
+
+        const data = await res.json();
+        if (!data.success) return [];
+
+        return data.orders || [];
+      } catch (error) {
+        console.error("讀取歷史訂單失敗:", error);
+        return [];
+      }
     }
 
     function getUniqueCategories() {
-      const categories = ["全部", ...new Set(products.map(item => item.category).filter(Boolean))];
-      return categories;
+      return ["全部", ...new Set(products.map(item => item.category).filter(Boolean))];
     }
 
     function updateAdminButtonsVisibility() {
-      if (isAdmin) {
+      if (isAdminUser) {
         goToAdminTop.classList.remove("hidden");
       } else {
         goToAdminTop.classList.add("hidden");
+      }
+
+      if (currentUser) {
+        logoutTopBtn.classList.remove("hidden");
+      } else {
+        logoutTopBtn.classList.add("hidden");
       }
     }
 
@@ -1197,25 +1342,29 @@
         btn.className = "category-btn";
         if (category === currentCategory) btn.classList.add("active");
         btn.textContent = category;
+
         btn.addEventListener("click", () => {
           currentCategory = category;
           renderCategories();
           renderProducts();
           showProductList();
         });
+
         li.appendChild(btn);
         categoryList.appendChild(li);
       });
     }
 
     function getFilteredProducts() {
+      const keyword = currentSearch.toLowerCase();
+
       return products.filter(product => {
         const categoryMatch = currentCategory === "全部" || product.category === currentCategory;
-        const keyword = currentSearch.toLowerCase();
         const searchMatch =
-          product.name.toLowerCase().includes(keyword) ||
-          product.code.toLowerCase().includes(keyword) ||
-          product.category.toLowerCase().includes(keyword);
+          String(product.name || "").toLowerCase().includes(keyword) ||
+          String(product.code || "").toLowerCase().includes(keyword) ||
+          String(product.category || "").toLowerCase().includes(keyword);
+
         return categoryMatch && searchMatch;
       });
     }
@@ -1223,6 +1372,7 @@
     function renderProducts() {
       const filtered = getFilteredProducts();
       const title = currentCategory === "全部" ? "商品列表" : currentCategory;
+
       sectionTitle.textContent = title;
       pageTitle.textContent = title;
       productGrid.innerHTML = "";
@@ -1248,6 +1398,7 @@
 
     function renderOptionButtons(container, options, activeValue, onClick) {
       container.innerHTML = "";
+
       options.forEach(option => {
         const btn = document.createElement("button");
         btn.type = "button";
@@ -1278,16 +1429,18 @@
     function setDetailMainImage(product, index) {
       const images = getProductImages(product);
       currentDetailImageIndex = index;
+
       if (images[index]) {
         detailImage.innerHTML = `<img src="${escapeHTML(images[index])}" alt="${escapeHTML(product.name)}">`;
       } else {
         detailImage.textContent = product.imageText || "商品圖";
       }
+
       renderDetailThumbs(product);
     }
 
     function openProductDetail(productId) {
-      const product = products.find(p => p.id === productId);
+      const product = products.find(p => Number(p.id) === Number(productId));
       if (!product) return;
 
       selectedProduct = product;
@@ -1334,7 +1487,7 @@
       const normalizedColor = color || "";
 
       const existed = cart.find(item =>
-        item.id === product.id &&
+        Number(item.id) === Number(product.id) &&
         item.size === normalizedSize &&
         item.color === normalizedColor
       );
@@ -1386,7 +1539,7 @@
         });
       }
 
-      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      const totalQty = cart.reduce((sum, item) => sum + Number(item.qty || 0), 0);
       cartCount.textContent = totalQty;
       cartTotalQty.textContent = totalQty;
     }
@@ -1422,6 +1575,7 @@
             <div><strong>訂單編號：${order.id}</strong></div>
             <div class="product-meta">${escapeHTML(order.createdAt)}</div>
           </div>
+          <div class="product-meta" style="margin-bottom:12px;">狀態：${escapeHTML(order.status || "待處理")}</div>
           <div class="history-items">${itemsHtml}</div>
           <div class="detail-actions">
             <button class="btn btn-primary" data-order-id="${order.id}">再次購買這筆訂單</button>
@@ -1508,7 +1662,7 @@
     }
 
     function enterEditMode(product) {
-      editingProductId = product.id;
+      editingProductId = Number(product.id);
       editingKeepImages = [...getProductImages(product)];
 
       adminPanelTitle.textContent = "編輯產品";
@@ -1576,6 +1730,7 @@
         method: "POST",
         body: formData
       });
+
       return await res.json();
     }
 
@@ -1600,6 +1755,7 @@
         method: "PUT",
         body: formData
       });
+
       return await res.json();
     }
 
@@ -1610,8 +1766,8 @@
       const confirmed = confirm(`確定要刪除商品「${product.name}」嗎？`);
       if (!confirmed) return;
 
-      const res = await fetch(`/api/products/${productId}`, {
-        method: "DELETE",
+      const res = await fetch(`/api/products/${productId}/delete`, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           adminAccount,
@@ -1627,36 +1783,52 @@
 
       alert("商品已刪除");
       await fetchProducts();
+
       if (editingProductId === Number(productId)) {
         enterAddMode();
       }
     }
 
     async function checkout() {
+      if (!currentUser) {
+        alert("請先登入");
+        return;
+      }
+
       if (!cart.length) {
         alert("購物車目前沒有商品");
         return;
       }
 
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: currentUser,
-          items: cart
-        })
-      });
+      try {
+        const res = await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: currentUser,
+            items: cart
+          })
+        });
 
-      const data = await res.json();
-      if (!data.success) {
-        alert(data.message || "訂單送出失敗");
-        return;
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          throw new Error("訂單送出失敗，伺服器未回傳 JSON");
+        }
+
+        const data = await res.json();
+        if (!data.success) {
+          alert(data.message || "訂單送出失敗");
+          return;
+        }
+
+        alert(`訂單已送出，訂單編號：${data.orderId}`);
+        cart = [];
+        renderCart();
+        closeCart();
+      } catch (error) {
+        console.error("訂單送出失敗:", error);
+        alert("訂單送出失敗，請確認後端是否正常");
       }
-
-      alert(`訂單已送出，訂單編號：${data.orderId}`);
-      cart = [];
-      renderCart();
-      closeCart();
     }
 
     function showAdminApp() {
@@ -1682,13 +1854,14 @@
 
     function handleLogout() {
       currentUser = "";
-      isAdmin = false;
+      isAdminUser = false;
       adminAccount = "";
       adminPassword = "";
       cart = [];
       selectedProduct = null;
       currentSearch = "";
       currentCategory = "全部";
+      searchInput.value = "";
       enterAddMode();
       renderCart();
       loginForm.reset();
@@ -1696,6 +1869,7 @@
       adminApp.classList.add("hidden");
       loginPage.classList.remove("hidden");
       updateAdminButtonsVisibility();
+      closeAllPanels();
     }
 
     loginForm.addEventListener("submit", async (e) => {
@@ -1704,25 +1878,40 @@
       const accountInput = document.getElementById("account").value.trim();
       const passwordInput = document.getElementById("password").value.trim();
 
-      currentUser = accountInput || "guest";
-      isAdmin = false;
+      if (!accountInput || !passwordInput) {
+        alert("請輸入帳號與密碼");
+        return;
+      }
+
+      currentUser = accountInput;
+      isAdminUser = false;
       adminAccount = "";
       adminPassword = "";
 
       try {
-        const result = await adminLogin(accountInput, passwordInput);
-        if (result.success) {
-          isAdmin = true;
+        if (accountInput === "c417") {
+          const result = await adminLogin(accountInput, passwordInput);
+
+          if (!result.success) {
+            alert(result.message || "管理員登入失敗");
+            return;
+          }
+
+          isAdminUser = true;
           adminAccount = accountInput;
           adminPassword = passwordInput;
+
           await fetchProducts();
           showAdminApp();
           return;
         }
-      } catch (error) {}
 
-      await fetchProducts();
-      showShopApp();
+        await fetchProducts();
+        showShopApp();
+      } catch (error) {
+        console.error("登入失敗:", error);
+        alert("登入失敗，請確認伺服器是否正常啟動");
+      }
     });
 
     searchInput.addEventListener("input", (e) => {
@@ -1774,11 +1963,14 @@
       const action = target.dataset.action;
       const index = Number(target.dataset.index);
 
-      if (Number.isNaN(index)) return;
+      if (Number.isNaN(index) || !cart[index]) return;
 
       if (action === "minus") {
-        if (cart[index].qty > 1) cart[index].qty--;
-        else cart.splice(index, 1);
+        if (cart[index].qty > 1) {
+          cart[index].qty--;
+        } else {
+          cart.splice(index, 1);
+        }
       } else if (action === "plus") {
         cart[index].qty++;
       } else if (action === "remove") {
@@ -1815,11 +2007,12 @@
     });
 
     goToAdminTop.addEventListener("click", async () => {
-      if (!isAdmin) return;
+      if (!isAdminUser) return;
       if (!products.length) await fetchProducts();
       showAdminApp();
     });
 
+    logoutTopBtn.addEventListener("click", handleLogout);
     adminBackToShopBtn.addEventListener("click", showShopApp);
     adminLogoutBtn.addEventListener("click", handleLogout);
 
@@ -1844,21 +2037,26 @@
         return;
       }
 
-      let data;
-      if (editingProductId === null) {
-        data = await createProduct();
-      } else {
-        data = await updateProduct();
-      }
+      try {
+        let data;
+        if (editingProductId === null) {
+          data = await createProduct();
+        } else {
+          data = await updateProduct();
+        }
 
-      if (!data.success) {
-        alert(data.message || "操作失敗");
-        return;
-      }
+        if (!data.success) {
+          alert(data.message || "操作失敗");
+          return;
+        }
 
-      alert(data.message || "完成");
-      enterAddMode();
-      await fetchProducts();
+        alert(data.message || "完成");
+        enterAddMode();
+        await fetchProducts();
+      } catch (error) {
+        console.error("商品操作失敗:", error);
+        alert("商品操作失敗，請確認伺服器是否正常");
+      }
     });
 
     existingImagesList.addEventListener("click", (e) => {
