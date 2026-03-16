@@ -1,0 +1,27 @@
+{
+  "name": "bingchang-shop",
+  "version": "1.0.0",
+  "description": "炳昌訂購系統",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.1",
+    "multer": "^1.4.5-lts.1",
+    "sqlite3": "^5.1.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/insulation87/APP.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/insulation87/APP/issues"
+  },
+  "homepage": "https://github.com/insulation87/APP#readme"
+}
