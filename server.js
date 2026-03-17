@@ -242,9 +242,7 @@ const upload = multer({
   }
 });
 
-/* =========================
-   管理員登入
-========================= */
+
 app.post("/api/admin/login", (req, res) => {
   try {
     const { account, password } = req.body;
