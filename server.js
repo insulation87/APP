@@ -23,11 +23,11 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use((req, res, next) => {
-  console.log("[REQUEST]", req.method, req.url);
+  console.log(`[REQUEST] ${req.method} ${req.url}`);
   next();
 });
 
@@ -181,6 +181,8 @@ async function initDb() {
         [item.category, item.name, item.code, item.description, item.sizes, item.colors]
       );
     }
+
+    console.log("已建立預設商品資料");
   }
 }
 
@@ -240,27 +242,44 @@ const upload = multer({
   }
 });
 
+/* =========================
+   管理員登入
+========================= */
 app.post("/api/admin/login", (req, res) => {
-  const { account, password } = req.body;
+  try {
+    const { account, password } = req.body;
 
-  if (!isAdmin(account, password)) {
-    return res.status(401).json({
+    if (!isAdmin(account, password)) {
+      return res.status(401).json({
+        success: false,
+        message: "帳號或密碼錯誤"
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "管理員登入成功"
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: "帳號或密碼錯誤"
+      message: "登入失敗",
+      error: error.message
     });
   }
-
-  res.json({
-    success: true,
-    message: "管理員登入成功"
-  });
 });
 
 app.get("/api/products", async (req, res) => {
   try {
+    console.log(">>> HIT GET /api/products");
     const products = await getProducts();
-    res.json({ success: true, products });
+
+    res.json({
+      success: true,
+      products
+    });
   } catch (error) {
+    console.error("讀取商品失敗:", error);
     res.status(500).json({
       success: false,
       message: "讀取商品失敗",
@@ -271,7 +290,16 @@ app.get("/api/products", async (req, res) => {
 
 app.get("/api/products/:id", async (req, res) => {
   try {
-    const product = await getProductById(req.params.id);
+    const productId = Number(req.params.id);
+
+    if (Number.isNaN(productId)) {
+      return res.status(400).json({
+        success: false,
+        message: "商品 ID 格式錯誤"
+      });
+    }
+
+    const product = await getProductById(productId);
 
     if (!product) {
       return res.status(404).json({
@@ -280,8 +308,12 @@ app.get("/api/products/:id", async (req, res) => {
       });
     }
 
-    res.json({ success: true, product });
+    res.json({
+      success: true,
+      product
+    });
   } catch (error) {
+    console.error("讀取單一商品失敗:", error);
     res.status(500).json({
       success: false,
       message: "讀取商品失敗",
@@ -303,8 +335,12 @@ app.get("/api/products/category/:category", async (req, res) => {
       product.colors = safeJsonParse(product.colors, ["標準"]);
     }
 
-    res.json({ success: true, products: rows });
+    res.json({
+      success: true,
+      products: rows
+    });
   } catch (error) {
+    console.error("讀取分類商品失敗:", error);
     res.status(500).json({
       success: false,
       message: "讀取分類商品失敗",
@@ -313,8 +349,12 @@ app.get("/api/products/category/:category", async (req, res) => {
   }
 });
 
-app.post("/api/products", upload.array("images", 10), async (req, res) => {
+app.post("/api/products", upload.array("images", 20), async (req, res) => {
   try {
+    console.log(">>> HIT POST /api/products");
+    console.log("req.body =", req.body);
+    console.log("req.files count =", req.files ? req.files.length : 0);
+
     const {
       adminAccount,
       adminPassword,
@@ -376,6 +416,7 @@ app.post("/api/products", upload.array("images", 10), async (req, res) => {
       product
     });
   } catch (error) {
+    console.error("新增商品失敗:", error);
     res.status(500).json({
       success: false,
       message: "新增商品失敗",
@@ -384,9 +425,20 @@ app.post("/api/products", upload.array("images", 10), async (req, res) => {
   }
 });
 
-app.put("/api/products/:id", upload.array("images", 10), async (req, res) => {
+app.put("/api/products/:id", upload.array("images", 20), async (req, res) => {
   try {
+    console.log(">>> HIT PUT /api/products/:id");
+    console.log("req.body =", req.body);
+    console.log("req.files count =", req.files ? req.files.length : 0);
+
     const productId = Number(req.params.id);
+
+    if (Number.isNaN(productId)) {
+      return res.status(400).json({
+        success: false,
+        message: "商品 ID 格式錯誤"
+      });
+    }
 
     const {
       adminAccount,
@@ -476,6 +528,7 @@ app.put("/api/products/:id", upload.array("images", 10), async (req, res) => {
       product
     });
   } catch (error) {
+    console.error("修改商品失敗:", error);
     res.status(500).json({
       success: false,
       message: "修改商品失敗",
@@ -487,6 +540,14 @@ app.put("/api/products/:id", upload.array("images", 10), async (req, res) => {
 app.post("/api/products/:id/delete", async (req, res) => {
   try {
     const { adminAccount, adminPassword } = req.body;
+    const productId = Number(req.params.id);
+
+    if (Number.isNaN(productId)) {
+      return res.status(400).json({
+        success: false,
+        message: "商品 ID 格式錯誤"
+      });
+    }
 
     if (!isAdmin(adminAccount, adminPassword)) {
       return res.status(401).json({
@@ -495,7 +556,6 @@ app.post("/api/products/:id/delete", async (req, res) => {
       });
     }
 
-    const productId = Number(req.params.id);
     const product = await getProductById(productId);
 
     if (!product) {
@@ -518,6 +578,7 @@ app.post("/api/products/:id/delete", async (req, res) => {
       message: "商品刪除成功"
     });
   } catch (error) {
+    console.error("刪除商品失敗:", error);
     res.status(500).json({
       success: false,
       message: "刪除商品失敗",
@@ -526,8 +587,9 @@ app.post("/api/products/:id/delete", async (req, res) => {
   }
 });
 
+
 app.post("/api/orders", async (req, res) => {
-  console.log(">>> HIT /api/orders");
+  console.log(">>> HIT POST /api/orders");
   try {
     const { username, items } = req.body;
 
@@ -606,6 +668,7 @@ app.get("/api/orders/:username", async (req, res) => {
       orders
     });
   } catch (error) {
+    console.error("讀取歷史訂單失敗:", error);
     res.status(500).json({
       success: false,
       message: "讀取歷史訂單失敗",
@@ -613,6 +676,7 @@ app.get("/api/orders/:username", async (req, res) => {
     });
   }
 });
+
 
 app.post("/api/admin/orders", async (req, res) => {
   try {
@@ -639,6 +703,7 @@ app.post("/api/admin/orders", async (req, res) => {
       orders
     });
   } catch (error) {
+    console.error("讀取全部訂單失敗:", error);
     res.status(500).json({
       success: false,
       message: "讀取全部訂單失敗",
@@ -651,6 +716,13 @@ app.post("/api/admin/orders/:id/status", async (req, res) => {
   try {
     const { adminAccount, adminPassword, status } = req.body;
     const orderId = Number(req.params.id);
+
+    if (Number.isNaN(orderId)) {
+      return res.status(400).json({
+        success: false,
+        message: "訂單 ID 格式錯誤"
+      });
+    }
 
     if (!isAdmin(adminAccount, adminPassword)) {
       return res.status(401).json({
@@ -681,6 +753,7 @@ app.post("/api/admin/orders/:id/status", async (req, res) => {
       message: "訂單狀態更新成功"
     });
   } catch (error) {
+    console.error("更新訂單狀態失敗:", error);
     res.status(500).json({
       success: false,
       message: "更新訂單狀態失敗",
@@ -689,15 +762,35 @@ app.post("/api/admin/orders/:id/status", async (req, res) => {
   }
 });
 
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(publicDir, "order.html"));
 });
 
+
+app.use("/api", (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "找不到 API 路由"
+  });
+});
+
+
 app.use((err, req, res, next) => {
+  console.error("全域錯誤:", err);
+
   if (err instanceof multer.MulterError) {
+    let message = `檔案上傳失敗：${err.message}`;
+
+    if (err.code === "LIMIT_FILE_SIZE") {
+      message = "單張圖片不可超過 5MB";
+    } else if (err.code === "LIMIT_UNEXPECTED_FILE") {
+      message = "圖片數量超過上限，最多只能上傳 20 張";
+    }
+
     return res.status(400).json({
       success: false,
-      message: `檔案上傳失敗：${err.message}`
+      message
     });
   }
 
@@ -711,10 +804,12 @@ app.use((err, req, res, next) => {
   next();
 });
 
+
 initDb()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server is running at http://localhost:${PORT}`);
+      console.log(`Admin Account: ${ADMIN_ACCOUNT}`);
     });
   })
   .catch((error) => {
